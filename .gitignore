@@ -12,4 +12,5 @@
 *.omc
 test
 .omakedb*
+*.swp
 .DS_store

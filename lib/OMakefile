@@ -1,0 +1,12 @@
+.PHONY: all clean
+
+FILES[] =
+  caramel_list
+  caramel
+
+LIB = caramel
+
+.DEFAULT: $(OCamlLibrary $(LIB), $(FILES))
+
+clean:
+	rm -f *~ *.opt *.cmi *.cmx *.cmo *.omc *.cma *.cmxa *.o *.a *.out

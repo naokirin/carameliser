@@ -1,0 +1,22 @@
+.PHONY: all clean check
+OCAMLINCLUDES += ../lib
+
+FILES[] =
+  caramel_list_test
+  test
+
+OCAMLPACKS[] =
+  oUnit
+
+PROGRAM = test
+OCAML_LIBS += ../lib/caramel
+
+clean:
+	rm -f *~ *.opt *.cmi *.cmx *.o *.omc *.cma *.cmxa *.cmo $(PROGRAM) *.run
+
+.DEFAULT: all
+
+all : $(OCamlProgram $(PROGRAM), $(FILES))
+
+check : all
+	./$(PROGRAM)

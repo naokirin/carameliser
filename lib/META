@@ -1,0 +1,6 @@
+name="carameliser"
+version="0.1"
+description="carameliser for a putit library"
+requires=""
+archive(byte)="caramel_list.cmo caramel.cma"
+

@@ -1,0 +1,15 @@
+*~
+*.cmo
+*.cma
+*.cmi
+*.o
+*.a
+*.cmx
+*.cmxa
+*.run
+*.out
+*.annot
+*.omc
+test
+.omakedb*
+.DS_store

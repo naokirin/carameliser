@@ -1,7 +1,7 @@
 
-module List = ListLabels
+include ListLabels
 
-include List
+module Exceptionless = Caramel_list_exceptionless
 
 exception Invalid_index of int
 
@@ -55,13 +55,6 @@ let mapi ~f l =
   in
   rev (recur 0 [] l)
 
-let try_find ~f l =
-  let rec recur = function
-    |[] -> None
-    |x::xs -> if f x then Some x else recur xs
-  in
-  recur l
-
 let findi ~f l =
   let rec recur i = function
     |[] -> raise Not_found
@@ -71,17 +64,8 @@ let findi ~f l =
 
 let rfind ~f l = find ~f:f (rev l)
 
-let try_reduce ~f l =
-  let rec recur p = function
-    |[] -> Some p
-    |x::xs -> recur (f p x) xs
-  in
-  match l with
-  |[] -> None
-  |x::xs -> recur x xs
-
 let reduce ~f l =
-  match (try_reduce l ~f:f) with
+  match (Exceptionless.try_reduce l ~f:f) with
   |None -> invalid_arg "The list is empty."
   |Some x -> x
 

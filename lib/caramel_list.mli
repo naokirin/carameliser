@@ -1,6 +1,10 @@
 
 include module type of ListLabels
 
+module Exceptionless : sig
+  include module type of Caramel_list_exceptionless
+end
+
 (** [Invalid_index] which index is invalid *)
 exception Invalid_index of int
 
@@ -26,10 +30,6 @@ val filter_map: f:('a -> 'b option) -> 'a list -> 'b list
 (** [mapi] is similar to map, but it's iterative function receive each element index. *)
 val mapi: f:(int -> 'a -> 'b) -> 'a list -> 'b list
 
-(** [try_find] is similar to find, but it do NOT raise Not_found.
-    Return to type Option, so it return None if there is no value that satisfies the received function in the list. *)
-val try_find: f:('a -> bool) -> 'a list -> 'a option
-
 (** [findi ~f l] is similar to find, but appling with index and return (index, x) *)
 val findi: f:(int -> 'a -> bool) -> 'a list -> (int * 'a)
 
@@ -39,9 +39,6 @@ val rfind: f:('a -> bool) -> 'a list -> 'a
 (** [reduce ~f:f l] is apply the function to the element in l.
     If elements is i0..iN, [reduce] is the same to f ((f i0 i1) i2) ...) iN.    [reduce] raises Invalid_argument if there is no element in l. *)
 val reduce: f:('a -> 'a -> 'a) -> 'a list -> 'a
-
-(** [try_reduce] is the same as reduce, but None if there is no element in the l. *)
-val try_reduce: f:('a -> 'a -> 'a) -> 'a list -> 'a option
 
 (** [unique] returns the list without any duplicate element.
     Default comparator is (=) if no applied ?cmp. *)

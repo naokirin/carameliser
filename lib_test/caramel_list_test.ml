@@ -62,9 +62,9 @@ let test =
     "try_find" >::
       (fun () ->
         assert_equal ~msg:"found"
-          (Some 2) (try_find [1; 2; 3] ~f:(fun n -> n=2));
+          (Some 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
         assert_equal ~msg:"not found"
-          None (try_find [1; 2; 3] ~f:(fun n -> n=5)));
+          None (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
 
     "findi" >::
       (fun () ->
@@ -73,12 +73,26 @@ let test =
         assert_raises ~msg:"not found"
           (Not_found) (fun () -> findi [1; 2; 3] ~f:(fun i n -> n=5)));
 
+    "try_findi" >::
+      (fun () ->
+        assert_equal ~msg:"found"
+          (Some (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
+        assert_equal ~msg:"not_found"
+          None (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
+
     "rfind" >::
       (fun () ->
         assert_equal ~msg:"found"
           4 (rfind [1; 2; 3; 4; 5] ~f:(fun n -> (n mod 2)=0));
         assert_raises ~msg:"not found"
           (Not_found) (fun () -> rfind [1; 2; 3] ~f:(fun n -> n=5)));
+
+    "try_rfind" >::
+      (fun () ->
+        assert_equal ~msg:"found"
+          (Some 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
+        assert_equal ~msg:"not found"
+          None (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
 
     "reduce" >::
       (fun () ->
@@ -92,11 +106,11 @@ let test =
     "try_reduce" >::
       (fun () ->
         assert_equal ~msg:"add 1..5"
-          (Some 15) (try_reduce [1; 2; 3; 4; 5] ~f:(+));
+          (Some 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
         assert_equal ~msg:"concat string"
-          (Some "abcd") (try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
+          (Some "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
         assert_equal ~msg:"empty"
-          None (try_reduce [] ~f:(+)));
+          None (Exceptionless.try_reduce [] ~f:(+)));
 
     "unique" >::
       (fun () ->

@@ -1,4 +1,4 @@
-module Either = Caramel_either
-module List = Caramel_list
+include Caramel_either
+include Caramel_list
 
 let (@) = List.append

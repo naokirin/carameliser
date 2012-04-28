@@ -1,14 +1,17 @@
 
 module List = ListLabels
 
-include ListLabels
+include List
+
+exception Invalid_index of int
 
 let split_nth n l =
   let rec recur i ls = function
     |[] -> ((rev ls), [])
     |x::xs -> if (n <= i) then ((rev ls), x::xs) else recur (i+1) (x::ls) xs
   in
-  recur 0 [] l
+  if n < 0 || n > (length l) then raise (Invalid_index n)
+  else recur 0 [] l
 
 let split_while ~f l =
   let rec recur ls = function
@@ -124,14 +127,16 @@ let init ~f n =
     if i<n then recur (i+1) ((f i)::ls)
     else ls
   in
-  rev (recur 0 [])
+  if n<0 then raise (Invalid_index n)
+  else rev (recur 0 [])
 
 let make n v =
   let rec recur i ls =
     if i<n then recur (i+1) (v::ls)
     else ls
   in
-  rev (recur 0 [])
+  if n<0 then raise (Invalid_index n)
+  else rev (recur 0 [])
 
 let of_array arr =
   Array.to_list arr

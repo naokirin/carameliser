@@ -1,7 +1,11 @@
 
 include module type of ListLabels
 
-(** [split_nth] split nth in the list. *)
+(** [Invalid_index] which index is invalid *)
+exception Invalid_index of int
+
+(** [split_nth] split nth in the list.
+    Riase Invalid_index if the index is out of bounds. *)
 val split_nth: int -> 'a list -> ('a list * 'a list)
 
 (** [split_while] split while the function returned true. *)
@@ -43,7 +47,8 @@ val try_reduce: f:('a -> 'a -> 'a) -> 'a list -> 'a option
     Default comparator is (=) if no applied ?cmp. *)
 val unique: ?cmp:('a -> 'a -> bool) -> 'a list -> 'a list
 
-(** [drop] returns the list without the element of index. *)
+(** [drop] returns the list without the element of index.
+    Raise Invalid_index if the index is out of bounds. *)
 val drop: int -> 'a list -> 'a list
 
 (** [drop_while] returns the list without the element until the function returned false. *)
@@ -55,16 +60,19 @@ val remove: ?cmp:('a -> 'a -> bool) -> 'a -> 'a list -> 'a list
 (** [remove_all] remove mutched all element in the list. *)
 val remove_all: ?cmp:('a -> 'a -> bool) -> 'a -> 'a list -> 'a list
 
-(** [take] takes nth elements in the list. *)
+(** [take] takes nth elements in the list.
+    Raise Invalid_index if the index is out of bounds. *)
 val take: int -> 'a list -> 'a list
 
 (** [take_while] returns the list until the function returned true. *)
 val take_while: f:('a -> bool) -> 'a list -> 'a list
 
-(** [init ~f n] returns the list containing (f 0),(f 1)...,(f (n-1)). *)
+(** [init ~f n] returns the list containing (f 0),(f 1)...,(f (n-1)).
+    Raise Invalid_index if the index is out of bounds. *)
 val init: f:(int -> 'a) -> int -> 'a list
 
-(** [make n a] returns the list containing a and to be length n. *)
+(** [make n a] returns the list containing a and to be length n.
+    Raise Invalid_index if the index is out of bounds. *)
 val make: int -> 'a -> 'a list
 
 (** [of_array] is the same as Array.to_list. *)

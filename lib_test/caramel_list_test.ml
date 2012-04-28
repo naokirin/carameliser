@@ -8,9 +8,10 @@ let test =
       (fun () ->
         assert_equal ~msg:"split_0th" ([], [1;2;3]) (split_nth 0 [1;2;3]);
         assert_equal ~msg:"split_1st" ([1], [2;3]) (split_nth 1 [1;2;3]);
-        assert_equal ~msg:"over" ([1;2;3], []) (split_nth 3 [1;2;3]);
         assert_equal ~msg:"empty" ([], []) (split_nth 0 []);
-        assert_equal ~msg:"minus" ([], [1;2;3]) (split_nth ~-1 [1;2;3]));
+        assert_equal ~msg:"length" ([1;2;3], []) (split_nth 3 [1;2;3]);
+        assert_raises ~msg:"over" (Invalid_index 4) (fun () -> split_nth 4 [1;2;3]);
+        assert_raises ~msg:"minus" (Invalid_index ~-1) (fun () -> split_nth ~-1 [1;2;3]));
 
     "split_while" >::
       (fun () ->
@@ -108,8 +109,8 @@ let test =
       (fun () ->
         assert_equal ~msg:"drop1"
           [2;3] (drop 1 [1; 2; 3]);
-        assert_equal ~msg:"drop2"
-          [] (drop 4 [1; 2; 3]));
+        assert_raises ~msg:"over"
+          (Invalid_index 4) (fun () -> drop 4 [1; 2; 3]));
 
     "drop_while" >::
       (fun () ->
@@ -142,10 +143,10 @@ let test =
           [1] (take 1 [1;2;3]);
         assert_equal ~msg:"take 0"
           [] (take 0 [1;2;3]);
-        assert_equal ~msg:"empty"
-          [] (take 1 []);
-        assert_equal ~msg:"minus"
-          [] (take ~-1 [1;2;3]));
+        assert_raises ~msg:"empty"
+          (Invalid_index 1) (fun () -> take 1 []);
+        assert_raises ~msg:"minus"
+          (Invalid_index ~-1) (fun () -> take ~-1 [1;2;3]));
 
     "take_while" >::
       (fun () ->
@@ -162,8 +163,8 @@ let test =
           [1;2;3] (init 3 ~f:(fun n -> n+1));
         assert_equal ~msg:"empty"
           [] (init 0 ~f:(fun n -> 1));
-        assert_equal ~msg:"minus"
-          [] (init ~-1 ~f:(fun n -> 1)));
+        assert_raises ~msg:"minus"
+          (Invalid_index ~-1) (fun () -> init ~-1 ~f:(fun n -> 1)));
 
     "make" >::
       (fun () ->
@@ -173,8 +174,8 @@ let test =
           [1;1;1] (make 3 1);
         assert_equal ~msg:"empty"
           [] (make 0 0);
-        assert_equal ~msg:"minus"
-          [] (make ~-1 0));
+        assert_raises ~msg:"minus"
+          (Invalid_index ~-1) (fun () -> make ~-1 0));
 
     "of_array" >::
       (fun () ->

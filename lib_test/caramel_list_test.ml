@@ -9,8 +9,8 @@ let test =
       (fun () ->
         assert_equal ~msg:"split_0th" ([], [1;2;3]) (split_nth [1;2;3] 0);
         assert_equal ~msg:"split_1st" ([1], [2;3]) (split_nth [1;2;3] 1);
-        assert_equal ~msg:"empty" ([], []) (split_nth [] 0);
         assert_equal ~msg:"length" ([1;2;3], []) (split_nth [1;2;3] 3);
+        assert_equal ~msg:"empty" ([], []) (split_nth [] 0);
         assert_raises ~msg:"over" (Invalid_index 4) (fun () -> split_nth [1;2;3] 4);
         assert_raises ~msg:"minus" (Invalid_index ~-1) (fun () -> split_nth [1;2;3] ~-1));
 
@@ -63,9 +63,9 @@ let test =
     "try_find" >::
       (fun () ->
         assert_equal ~msg:"found"
-          (Some 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
+          (Right 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
         assert_equal ~msg:"not found"
-          None (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
+          (Left Not_found) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
 
     "findi" >::
       (fun () ->
@@ -77,9 +77,9 @@ let test =
     "try_findi" >::
       (fun () ->
         assert_equal ~msg:"found"
-          (Some (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
+          (Right (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
         assert_equal ~msg:"not_found"
-          None (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
+          (Left Not_found) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
 
     "rfind" >::
       (fun () ->
@@ -91,9 +91,9 @@ let test =
     "try_rfind" >::
       (fun () ->
         assert_equal ~msg:"found"
-          (Some 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
+          (Right 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
         assert_equal ~msg:"not found"
-          None (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
+          (Left Not_found) (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
 
     "reduce" >::
       (fun () ->
@@ -158,8 +158,8 @@ let test =
           [1] (take [1;2;3] 1);
         assert_equal ~msg:"take 0"
           [] (take [1;2;3] 0);
-        assert_raises ~msg:"empty"
-          (Invalid_index 1) (fun () -> take [] 1);
+        assert_equal ~msg:"empty"
+          [] (take [] 0);
         assert_raises ~msg:"minus"
           (Invalid_index ~-1) (fun () -> take [1;2;3] ~-1));
 
@@ -220,8 +220,8 @@ let test =
       (fun () ->
         assert_equal ~msg:"split"
           (Right ([1], [2;3])) (Exceptionless.try_split_nth [1;2;3] 1);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_index 1)) (Exceptionless.try_split_nth [] 1));
+        assert_equal ~msg:"invalid index"
+          (Left (Invalid_index 2)) (Exceptionless.try_split_nth [1] 2));
 
     "try_init" >::
       (fun () ->
@@ -241,7 +241,7 @@ let test =
       (fun () ->
         assert_equal ~msg:"take"
           (Right [1;2]) (Exceptionless.try_take [1;2;3] 2);
-        assert_equal ~msg:"failure"
+        assert_equal ~msg:"invalid index"
           (Left (Invalid_index ~-1)) (Exceptionless.try_take [1;2;3] ~-1));
 
     "try_drop" >::

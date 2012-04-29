@@ -81,13 +81,13 @@ module List : sig
 
     (** [try_find] is similar to find, but does NOT raise Not_found.
         Return to type Option, so it return None if there is no value that satisfies the received function in the list. *)
-    val try_find: f:('a -> bool) -> 'a list -> 'a option
+    val try_find: f:('a -> bool) -> 'a list -> (exn, 'a) either
 
     (** [try_findi] is similar to findi, but does NOT raise Not_found. *)
-    val try_findi: f:(int -> 'a -> bool) -> 'a list -> (int * 'a) option
+    val try_findi: f:(int -> 'a -> bool) -> 'a list -> (exn, (int * 'a)) either
 
     (** [try_rfind] is similar to rfind, but does NOT raise Not_found. *)
-    val try_rfind: f:('a -> bool) -> 'a list -> 'a option
+    val try_rfind: f:('a -> bool) -> 'a list -> (exn, 'a) either
 
     (** [try_reduce] is the similar to reduce, but None if there is no element in the l. *)
     val try_reduce: f:('a -> 'a -> 'a) -> 'a list -> (exn, 'a) either

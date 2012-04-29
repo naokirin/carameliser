@@ -76,11 +76,59 @@ module List : sig
   (** [to_array] is the same as Array.of_array. *)
   val to_array: 'a list -> 'a array
 
+
+  (** In Module Optional functions return value of either. *)
+  module Optional : sig
+
+    (** [find] is similar to find, but does NOT raise Not_found. *)
+    val find: f:('a -> bool) -> 'a list -> 'a option
+
+    (** [findi] is similar to findi, but does NOT raise Not_found. *)
+    val findi: f:(int -> 'a -> bool) -> 'a list -> (int * 'a) option
+
+    (** [rfind] is similar to rfind, but does NOT raise Not_found. *)
+    val rfind: f:('a -> bool) -> 'a list -> 'a option
+
+    (** [reduce] is the similar to reduce, but None if there is no element in the l. *)
+    val reduce: f:('a -> 'a -> 'a) -> 'a list -> 'a option
+
+    (** [assoc] is the similar to assoc, but does NOT raise Not_found. *)
+    val assoc: 'a -> ('a * 'b) list -> 'b option
+
+    (** [combine] is the similar to combine, but does NOT raise Invalid_argument *)
+    val combine: 'a list -> 'b list -> ('a * 'b) list option
+
+    (** [split_nth] is the similar to combine, but does NOT raise Invalid_index. *)
+    val split_nth: 'a list -> int -> ('a list * 'a list) option
+
+    (** [init] is the similar to init, but does NOT raise Invalid_index. *)
+    val init: f:(int -> 'a) -> int -> 'a list option
+
+    (** [make] is the similar to make, but does NOT raise Invalid_index  *)
+    val make: 'a -> int -> 'a list option
+
+    (** [take] is the similar to take, but does NOT raise Invalid_index. *)
+    val take: 'a list -> int -> 'a list option
+
+    (** [drop] is the similar to drop, but does NOT raise Invalid_index. *)
+    val drop: 'a list -> int -> 'a list option
+
+    (** [hd] is the similar to hd, but does NOT raise Failure. *)
+    val hd: 'a list -> 'a option
+
+    (** [tl] is the similar to tl, but does NOT raise Failure. *)
+    val tl: 'a list -> 'a list option
+
+    (** [nth] is the similar to nth, but does NOT raise Invalid_argument. *)
+    val nth: 'a list -> int -> 'a option
+  end
+
+
+  (** In Module Exceptionless functions return value of either. *)
   module Exceptionless : sig
     open Caramel_either
 
-    (** [try_find] is similar to find, but does NOT raise Not_found.
-        Return to type Option, so it return None if there is no value that satisfies the received function in the list. *)
+    (** [try_find] is similar to find, but does NOT raise Not_found. *)
     val try_find: f:('a -> bool) -> 'a list -> (exn, 'a) either
 
     (** [try_findi] is similar to findi, but does NOT raise Not_found. *)
@@ -122,4 +170,5 @@ module List : sig
     (** [try_nth] is the similar to nth, but does NOT raise Invalid_argument. *)
     val try_nth: 'a list -> int -> (exn, 'a) either
   end
+
 end

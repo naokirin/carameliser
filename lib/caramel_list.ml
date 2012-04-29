@@ -23,8 +23,7 @@ module List = struct
     in
     recur [] l
 
-  let iteri ~f l =
-    ignore (fold_left ~f:(fun i x -> f i x; i+1) ~init:0 l)
+  let iteri ~f l = ignore (fold_left ~f:(fun i x -> f i x; i+1) ~init:0 l)
 
   let collect ~f l =
     let rec recur ls = function
@@ -44,8 +43,7 @@ module List = struct
     in
     recur l []
 
-  let filter_map ~f l =
-    rev (rev_filter_map ~f:f l)
+  let filter_map ~f l = rev (rev_filter_map ~f:f l)
 
   let mapi ~f l =
     let rec recur i ls = function
@@ -125,54 +123,44 @@ module List = struct
     if n<0 then raise (Invalid_index n)
     else rev (recur 0 [])
 
-  let of_array arr =
-    Array.to_list arr
+  let of_array arr = Array.to_list arr
+  let to_array l = Array.of_list l
 
-  let to_array l =
-    Array.of_list l
+
+  module Optional = struct
+    open Caramel_option.Option
+    let find ~f l = ret_option (find ~f:f) l
+    let findi ~f l = ret_option (findi ~f:f) l
+    let rfind ~f l = ret_option (rfind ~f:f) l
+    let reduce ~f l = ret_option (reduce ~f:f) l
+    let assoc n l = ret_option (assoc n) l
+    let combine l m = ret_option (combine l) m
+    let split_nth n l = ret_option (split_nth n) l
+    let init ~f n = ret_option (init ~f:f) n
+    let make n i = ret_option (make n) i
+    let take l i = ret_option (take l) i
+    let drop l i = ret_option (drop l) i
+    let hd l = ret_option hd l
+    let tl l = ret_option tl l
+    let nth l i = ret_option (nth l) i
+  end
+
 
   module Exceptionless = struct
     open Caramel_either.Either
-
-    let try_find ~f l =
-      ret_either (find ~f:f) l
-
-    let try_findi ~f l =
-      ret_either (findi ~f:f) l
-
+    let try_find ~f l = ret_either (find ~f:f) l
+    let try_findi ~f l = ret_either (findi ~f:f) l
     let try_rfind ~f l = try_find ~f:f (rev l)
-
-    let try_reduce ~f l =
-      ret_either (reduce ~f:f) l
-
-    let try_assoc n l =
-      ret_either (assoc n) l
-
-    let try_combine l m =
-      ret_either (combine l) m
-
-    let try_split_nth l n=
-      ret_either (split_nth l) n
-
-    let try_init ~f n =
-      ret_either (init ~f:f) n
-
-    let try_make n i =
-      ret_either (make n) i
-
-    let try_take l i =
-      ret_either (take l) i
-
-    let try_drop l i =
-      ret_either (drop l) i
-
-    let try_hd l =
-      ret_either hd l
-
-    let try_tl l =
-      ret_either tl l
-
-    let try_nth l i =
-      ret_either (nth l) i
+    let try_reduce ~f l = ret_either (reduce ~f:f) l
+    let try_assoc n l = ret_either (assoc n) l
+    let try_combine l m = ret_either (combine l) m
+    let try_split_nth l n = ret_either (split_nth l) n
+    let try_init ~f n = ret_either (init ~f:f) n
+    let try_make n i = ret_either (make n) i
+    let try_take l i = ret_either (take l) i
+    let try_drop l i = ret_either (drop l) i
+    let try_hd l = ret_either hd l
+    let try_tl l = ret_either tl l
+    let try_nth l i = ret_either (nth l) i
   end
 end

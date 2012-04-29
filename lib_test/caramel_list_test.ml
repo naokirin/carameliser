@@ -60,13 +60,6 @@ let test =
         assert_equal ~msg:"'index' ^ 'data'"
           ["0a"; "1b"; "2c"] (mapi ["a"; "b"; "c"] ~f:(fun i x -> (string_of_int i) ^ x)));
 
-    "try_find" >::
-      (fun () ->
-        assert_equal ~msg:"found"
-          (Right 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
-        assert_equal ~msg:"not found"
-          (Left Not_found) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
-
     "findi" >::
       (fun () ->
         assert_equal ~msg:"found"
@@ -74,26 +67,12 @@ let test =
         assert_raises ~msg:"not found"
           (Not_found) (fun () -> findi [1; 2; 3] ~f:(fun i n -> n=5)));
 
-    "try_findi" >::
-      (fun () ->
-        assert_equal ~msg:"found"
-          (Right (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
-        assert_equal ~msg:"not_found"
-          (Left Not_found) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
-
     "rfind" >::
       (fun () ->
         assert_equal ~msg:"found"
           4 (rfind [1; 2; 3; 4; 5] ~f:(fun n -> (n mod 2)=0));
         assert_raises ~msg:"not found"
           (Not_found) (fun () -> rfind [1; 2; 3] ~f:(fun n -> n=5)));
-
-    "try_rfind" >::
-      (fun () ->
-        assert_equal ~msg:"found"
-          (Right 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
-        assert_equal ~msg:"not found"
-          (Left Not_found) (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
 
     "reduce" >::
       (fun () ->
@@ -103,15 +82,6 @@ let test =
           "abcd" (reduce ["a"; "b"; "c"; "d"] ~f:(^));
         assert_raises ~msg:"list should not be empty"
           (Invalid_empty) (fun () -> reduce [] ~f:(+)));
-
-    "try_reduce" >::
-      (fun () ->
-        assert_equal ~msg:"add 1..5"
-          (Right 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
-        assert_equal ~msg:"concat string"
-          (Right "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
-        assert_equal ~msg:"empty"
-          (Left Invalid_empty) (Exceptionless.try_reduce [] ~f:(+)));
 
     "unique" >::
       (fun () ->
@@ -202,73 +172,209 @@ let test =
         assert_equal ~msg:"[1; 2; 3]"
           [|1; 2; 3|] (to_array [1; 2; 3]));
 
-    "try_assoc" >::
-      (fun () ->
-        assert_equal ~msg:"found"
-          (Right "a") (Exceptionless.try_assoc 1 [(1, "a"); (2, "b")]);
-        assert_equal ~msg:"not found"
-          (Left Not_found) (Exceptionless.try_assoc 1 [(2, "b")]));
+    "Optional" >:::
+    [
+      "find" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Some 2) (Optional.find [1; 2; 3] ~f:(fun n -> n=2));
+          assert_equal ~msg:"not found"
+            None (Optional.find [1; 2; 3] ~f:(fun n -> n=5)));
 
-    "try_combine" >::
-      (fun () ->
-        assert_equal ~msg:"combine"
-          (Right [(1, 2); (3, 4)]) (Exceptionless.try_combine [1; 3] [2; 4]);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_argument "List.combine")) (Exceptionless.try_combine [1;2] [1]));
+      "findi" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Some (1, 2)) (Optional.findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
+          assert_equal ~msg:"not_found"
+            None (Optional.findi [1;2;3] ~f:(fun i n -> n=5)));
 
-    "try_split_nth" >::
-      (fun () ->
-        assert_equal ~msg:"split"
-          (Right ([1], [2;3])) (Exceptionless.try_split_nth [1;2;3] 1);
-        assert_equal ~msg:"invalid index"
-          (Left (Invalid_index 2)) (Exceptionless.try_split_nth [1] 2));
+      "rfind" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Some 4) (Optional.rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
+          assert_equal ~msg:"not found"
+            None (Optional.rfind [1;2;3] ~f:(fun n -> n=5)));
 
-    "try_init" >::
-      (fun () ->
-        assert_equal ~msg:"init"
-          (Right [1;1;1]) (Exceptionless.try_init ~f:(fun i -> 1) 3);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_index ~-1)) (Exceptionless.try_init ~f:(fun i -> 1)~-1));
+      "reduce" >::
+        (fun () ->
+          assert_equal ~msg:"add 1..5"
+            (Some 15) (Optional.reduce [1; 2; 3; 4; 5] ~f:(+));
+          assert_equal ~msg:"concat string"
+            (Some "abcd") (Optional.reduce ["a"; "b"; "c"; "d"] ~f:(^));
+          assert_equal ~msg:"empty"
+            None (Optional.reduce [] ~f:(+)));
 
-    "try_make" >::
-      (fun () ->
-        assert_equal ~msg:"make"
-          (Right [1;1;1]) (Exceptionless.try_make 1 3);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_index ~-1)) (Exceptionless.try_make 1 ~-1));
+      "try_assoc" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Some "a") (Optional.assoc 1 [(1, "a"); (2, "b")]);
+          assert_equal ~msg:"not found"
+            None (Optional.assoc 1 [(2, "b")]));
 
-    "try_take" >::
-      (fun () ->
-        assert_equal ~msg:"take"
-          (Right [1;2]) (Exceptionless.try_take [1;2;3] 2);
-        assert_equal ~msg:"invalid index"
-          (Left (Invalid_index ~-1)) (Exceptionless.try_take [1;2;3] ~-1));
+      "try_combine" >::
+        (fun () ->
+          assert_equal ~msg:"combine"
+            (Some [(1, 2); (3, 4)]) (Optional.combine [1; 3] [2; 4]);
+          assert_equal ~msg:"failure"
+            None (Optional.combine [1;2] [1]));
 
-    "try_drop" >::
-      (fun () ->
-        assert_equal ~msg:"drop"
-          (Right [2;3]) (Exceptionless.try_drop [1;2;3] 1);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_index ~-1)) (Exceptionless.try_drop [1;2;3] ~-1));
+      "try_split_nth" >::
+        (fun () ->
+          assert_equal ~msg:"split"
+            (Some ([1], [2;3])) (Optional.split_nth [1;2;3] 1);
+          assert_equal ~msg:"invalid index"
+            None (Optional.split_nth [1] 2));
 
-    "try_hd" >::
-      (fun () ->
-        assert_equal ~msg:"hd"
-          (Right 1) (Exceptionless.try_hd [1;2;3]);
-        assert_equal ~msg:"failure"
-          (Left (Failure "hd")) (Exceptionless.try_hd []));
+      "try_init" >::
+        (fun () ->
+          assert_equal ~msg:"init"
+            (Some [1;1;1]) (Optional.init ~f:(fun i -> 1) 3);
+          assert_equal ~msg:"failure"
+            None (Optional.init ~f:(fun i -> 1)~-1));
 
-    "try_tl" >::
-      (fun () ->
-        assert_equal ~msg:"tl"
-          (Right [2;3]) (Exceptionless.try_tl [1;2;3]);
-        assert_equal ~msg:"failure"
-          (Left (Failure "tl")) (Exceptionless.try_tl []));
+      "try_make" >::
+        (fun () ->
+          assert_equal ~msg:"make"
+            (Some [1;1;1]) (Optional.make 1 3);
+          assert_equal ~msg:"failure"
+            None (Optional.make 1 ~-1));
 
-    "try_nth" >::
-      (fun () ->
-        assert_equal ~msg:"nth"
-          (Right 2) (Exceptionless.try_nth [1;2;3] 1);
-        assert_equal ~msg:"failure"
-          (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1))
+      "try_take" >::
+        (fun () ->
+          assert_equal ~msg:"take"
+            (Some [1;2]) (Optional.take [1;2;3] 2);
+          assert_equal ~msg:"invalid index"
+            None (Optional.take [1;2;3] ~-1));
+
+      "try_drop" >::
+        (fun () ->
+          assert_equal ~msg:"drop"
+            (Some [2;3]) (Optional.drop [1;2;3] 1);
+          assert_equal ~msg:"failure"
+            None (Optional.drop [1;2;3] ~-1));
+
+      "try_hd" >::
+        (fun () ->
+          assert_equal ~msg:"hd"
+            (Some 1) (Optional.hd [1;2;3]);
+          assert_equal ~msg:"failure"
+            None (Optional.hd []));
+
+      "try_tl" >::
+        (fun () ->
+          assert_equal ~msg:"tl"
+            (Some [2;3]) (Optional.tl [1;2;3]);
+          assert_equal ~msg:"failure"
+            None (Optional.tl []));
+
+      "try_nth" >::
+        (fun () ->
+          assert_equal ~msg:"nth"
+            (Some 2) (Optional.nth [1;2;3] 1);
+          assert_equal ~msg:"failure"
+            None (Optional.nth [1;2] ~-1))
+    ];
+
+    "Exceptionless" >:::
+    [
+      "try_find" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Right 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
+          assert_equal ~msg:"not found"
+            (Left Not_found) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
+
+      "try_findi" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Right (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
+          assert_equal ~msg:"not_found"
+            (Left Not_found) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
+
+      "try_rfind" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Right 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
+          assert_equal ~msg:"not found"
+            (Left Not_found) (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
+
+      "try_reduce" >::
+        (fun () ->
+          assert_equal ~msg:"add 1..5"
+            (Right 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
+          assert_equal ~msg:"concat string"
+            (Right "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
+          assert_equal ~msg:"empty"
+            (Left Invalid_empty) (Exceptionless.try_reduce [] ~f:(+)));
+
+      "try_assoc" >::
+        (fun () ->
+          assert_equal ~msg:"found"
+            (Right "a") (Exceptionless.try_assoc 1 [(1, "a"); (2, "b")]);
+          assert_equal ~msg:"not found"
+            (Left Not_found) (Exceptionless.try_assoc 1 [(2, "b")]));
+
+      "try_combine" >::
+        (fun () ->
+          assert_equal ~msg:"combine"
+            (Right [(1, 2); (3, 4)]) (Exceptionless.try_combine [1; 3] [2; 4]);
+          assert_equal ~msg:"failure"
+            (Left (Invalid_argument "List.combine")) (Exceptionless.try_combine [1;2] [1]));
+
+      "try_split_nth" >::
+        (fun () ->
+          assert_equal ~msg:"split"
+            (Right ([1], [2;3])) (Exceptionless.try_split_nth [1;2;3] 1);
+          assert_equal ~msg:"invalid index"
+            (Left (Invalid_index 2)) (Exceptionless.try_split_nth [1] 2));
+
+      "try_init" >::
+        (fun () ->
+          assert_equal ~msg:"init"
+            (Right [1;1;1]) (Exceptionless.try_init ~f:(fun i -> 1) 3);
+          assert_equal ~msg:"failure"
+            (Left (Invalid_index ~-1)) (Exceptionless.try_init ~f:(fun i -> 1)~-1));
+
+      "try_make" >::
+        (fun () ->
+          assert_equal ~msg:"make"
+            (Right [1;1;1]) (Exceptionless.try_make 1 3);
+          assert_equal ~msg:"failure"
+            (Left (Invalid_index ~-1)) (Exceptionless.try_make 1 ~-1));
+
+      "try_take" >::
+        (fun () ->
+          assert_equal ~msg:"take"
+            (Right [1;2]) (Exceptionless.try_take [1;2;3] 2);
+          assert_equal ~msg:"invalid index"
+            (Left (Invalid_index ~-1)) (Exceptionless.try_take [1;2;3] ~-1));
+
+      "try_drop" >::
+        (fun () ->
+          assert_equal ~msg:"drop"
+            (Right [2;3]) (Exceptionless.try_drop [1;2;3] 1);
+          assert_equal ~msg:"failure"
+            (Left (Invalid_index ~-1)) (Exceptionless.try_drop [1;2;3] ~-1));
+
+      "try_hd" >::
+        (fun () ->
+          assert_equal ~msg:"hd"
+            (Right 1) (Exceptionless.try_hd [1;2;3]);
+          assert_equal ~msg:"failure"
+            (Left (Failure "hd")) (Exceptionless.try_hd []));
+
+      "try_tl" >::
+        (fun () ->
+          assert_equal ~msg:"tl"
+            (Right [2;3]) (Exceptionless.try_tl [1;2;3]);
+          assert_equal ~msg:"failure"
+            (Left (Failure "tl")) (Exceptionless.try_tl []));
+
+      "try_nth" >::
+        (fun () ->
+          assert_equal ~msg:"nth"
+            (Right 2) (Exceptionless.try_nth [1;2;3] 1);
+          assert_equal ~msg:"failure"
+            (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1))
+      ]
     ]

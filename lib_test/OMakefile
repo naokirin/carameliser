@@ -2,6 +2,7 @@
 OCAMLINCLUDES += ../lib
 
 FILES[] =
+  caramel_option_test
   caramel_list_test
   test
 

@@ -2,6 +2,7 @@
 
 FILES[] =
   caramel_either
+  caramel_option
   caramel_list
   caramel
 

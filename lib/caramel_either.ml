@@ -3,7 +3,7 @@ type ('a, 'b) either =
   |Right of 'b
 
 module Either = struct
-  let ret_either f x =
+  let ret_either ~f x =
     try
       Right (f x)
     with e ->

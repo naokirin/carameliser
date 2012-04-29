@@ -1,4 +1,5 @@
 open OUnit
+open Caramel
 open Caramel.List
 
 let test =
@@ -6,12 +7,12 @@ let test =
   [
     "split_nth" >::
       (fun () ->
-        assert_equal ~msg:"split_0th" ([], [1;2;3]) (split_nth 0 [1;2;3]);
-        assert_equal ~msg:"split_1st" ([1], [2;3]) (split_nth 1 [1;2;3]);
-        assert_equal ~msg:"empty" ([], []) (split_nth 0 []);
-        assert_equal ~msg:"length" ([1;2;3], []) (split_nth 3 [1;2;3]);
-        assert_raises ~msg:"over" (Invalid_index 4) (fun () -> split_nth 4 [1;2;3]);
-        assert_raises ~msg:"minus" (Invalid_index ~-1) (fun () -> split_nth ~-1 [1;2;3]));
+        assert_equal ~msg:"split_0th" ([], [1;2;3]) (split_nth [1;2;3] 0);
+        assert_equal ~msg:"split_1st" ([1], [2;3]) (split_nth [1;2;3] 1);
+        assert_equal ~msg:"empty" ([], []) (split_nth [] 0);
+        assert_equal ~msg:"length" ([1;2;3], []) (split_nth [1;2;3] 3);
+        assert_raises ~msg:"over" (Invalid_index 4) (fun () -> split_nth [1;2;3] 4);
+        assert_raises ~msg:"minus" (Invalid_index ~-1) (fun () -> split_nth [1;2;3] ~-1));
 
     "split_while" >::
       (fun () ->
@@ -101,16 +102,16 @@ let test =
         assert_equal ~msg:"concat string"
           "abcd" (reduce ["a"; "b"; "c"; "d"] ~f:(^));
         assert_raises ~msg:"list should not be empty"
-          (Invalid_argument "The list is empty.") (fun () -> reduce [] ~f:(+)));
+          (Invalid_empty) (fun () -> reduce [] ~f:(+)));
 
     "try_reduce" >::
       (fun () ->
         assert_equal ~msg:"add 1..5"
-          (Some 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
+          (Right 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
         assert_equal ~msg:"concat string"
-          (Some "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
+          (Right "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
         assert_equal ~msg:"empty"
-          None (Exceptionless.try_reduce [] ~f:(+)));
+          (Left Invalid_empty) (Exceptionless.try_reduce [] ~f:(+)));
 
     "unique" >::
       (fun () ->
@@ -122,9 +123,9 @@ let test =
     "drop" >::
       (fun () ->
         assert_equal ~msg:"drop1"
-          [2;3] (drop 1 [1; 2; 3]);
+          [2;3] (drop [1; 2; 3] 1);
         assert_raises ~msg:"over"
-          (Invalid_index 4) (fun () -> drop 4 [1; 2; 3]));
+          (Invalid_index 4) (fun () -> drop [1; 2; 3] 4));
 
     "drop_while" >::
       (fun () ->
@@ -154,13 +155,13 @@ let test =
     "take" >::
       (fun () ->
         assert_equal ~msg:"take 1"
-          [1] (take 1 [1;2;3]);
+          [1] (take [1;2;3] 1);
         assert_equal ~msg:"take 0"
-          [] (take 0 [1;2;3]);
+          [] (take [1;2;3] 0);
         assert_raises ~msg:"empty"
-          (Invalid_index 1) (fun () -> take 1 []);
+          (Invalid_index 1) (fun () -> take [] 1);
         assert_raises ~msg:"minus"
-          (Invalid_index ~-1) (fun () -> take ~-1 [1;2;3]));
+          (Invalid_index ~-1) (fun () -> take [1;2;3] ~-1));
 
     "take_while" >::
       (fun () ->
@@ -172,24 +173,24 @@ let test =
     "init" >::
       (fun () ->
         assert_equal ~msg:"init 1"
-          [1] (init 1 ~f:(fun n -> 1));
+          [1] (init ~f:(fun n -> 1) 1);
         assert_equal ~msg:"init 2"
-          [1;2;3] (init 3 ~f:(fun n -> n+1));
+          [1;2;3] (init ~f:(fun n -> n+1) 3);
         assert_equal ~msg:"empty"
-          [] (init 0 ~f:(fun n -> 1));
+          [] (init ~f:(fun n -> 1) 0);
         assert_raises ~msg:"minus"
-          (Invalid_index ~-1) (fun () -> init ~-1 ~f:(fun n -> 1)));
+          (Invalid_index ~-1) (fun () -> init ~f:(fun n -> 1) ~-1));
 
     "make" >::
       (fun () ->
         assert_equal ~msg:"make 1"
           [1] (make 1 1);
         assert_equal ~msg:"make 2"
-          [1;1;1] (make 3 1);
+          [1;1;1] (make 1 3);
         assert_equal ~msg:"empty"
           [] (make 0 0);
         assert_raises ~msg:"minus"
-          (Invalid_index ~-1) (fun () -> make ~-1 0));
+          (Invalid_index ~-1) (fun () -> make 0 ~-1));
 
     "of_array" >::
       (fun () ->
@@ -199,5 +200,75 @@ let test =
     "to_array" >::
       (fun () ->
         assert_equal ~msg:"[1; 2; 3]"
-          [|1; 2; 3|] (to_array [1; 2; 3]))
+          [|1; 2; 3|] (to_array [1; 2; 3]));
+
+    "try_assoc" >::
+      (fun () ->
+        assert_equal ~msg:"found"
+          (Right "a") (Exceptionless.try_assoc 1 [(1, "a"); (2, "b")]);
+        assert_equal ~msg:"not found"
+          (Left Not_found) (Exceptionless.try_assoc 1 [(2, "b")]));
+
+    "try_combine" >::
+      (fun () ->
+        assert_equal ~msg:"combine"
+          (Right [(1, 2); (3, 4)]) (Exceptionless.try_combine [1; 3] [2; 4]);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_argument "List.combine")) (Exceptionless.try_combine [1;2] [1]));
+
+    "try_split_nth" >::
+      (fun () ->
+        assert_equal ~msg:"split"
+          (Right ([1], [2;3])) (Exceptionless.try_split_nth [1;2;3] 1);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_index 1)) (Exceptionless.try_split_nth [] 1));
+
+    "try_init" >::
+      (fun () ->
+        assert_equal ~msg:"init"
+          (Right [1;1;1]) (Exceptionless.try_init ~f:(fun i -> 1) 3);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_index ~-1)) (Exceptionless.try_init ~f:(fun i -> 1)~-1));
+
+    "try_make" >::
+      (fun () ->
+        assert_equal ~msg:"make"
+          (Right [1;1;1]) (Exceptionless.try_make 1 3);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_index ~-1)) (Exceptionless.try_make 1 ~-1));
+
+    "try_take" >::
+      (fun () ->
+        assert_equal ~msg:"take"
+          (Right [1;2]) (Exceptionless.try_take [1;2;3] 2);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_index ~-1)) (Exceptionless.try_take [1;2;3] ~-1));
+
+    "try_drop" >::
+      (fun () ->
+        assert_equal ~msg:"drop"
+          (Right [2;3]) (Exceptionless.try_drop [1;2;3] 1);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_index ~-1)) (Exceptionless.try_drop [1;2;3] ~-1));
+
+    "try_hd" >::
+      (fun () ->
+        assert_equal ~msg:"hd"
+          (Right 1) (Exceptionless.try_hd [1;2;3]);
+        assert_equal ~msg:"failure"
+          (Left (Failure "hd")) (Exceptionless.try_hd []));
+
+    "try_tl" >::
+      (fun () ->
+        assert_equal ~msg:"tl"
+          (Right [2;3]) (Exceptionless.try_tl [1;2;3]);
+        assert_equal ~msg:"failure"
+          (Left (Failure "tl")) (Exceptionless.try_tl []));
+
+    "try_nth" >::
+      (fun () ->
+        assert_equal ~msg:"nth"
+          (Right 2) (Exceptionless.try_nth [1;2;3] 1);
+        assert_equal ~msg:"failure"
+          (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1))
     ]

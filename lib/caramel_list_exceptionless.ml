@@ -23,4 +23,22 @@ module Exceptionless = struct
     match l with
     |[] -> None
     |x::xs -> recur x xs
+
+  let try_assoc n l =
+    let open Caramel_either.Either in
+    ret_either List.(assoc n) l
+
+  let try_combine l m =
+    let open Caramel_either.Either in
+    ret_either List.(combine l) m
+
+  let try_split_nth n l =
+    let open List in
+    let open Caramel_either in
+    let rec recur i ls = function
+      |[] -> ((rev ls), [])
+      |x::xs -> if (n <= i) then ((rev ls), x::xs) else recur (i+1) (x::ls)     xs
+    in
+    if n < 0 || n > (length l) then Left (Invalid_index n)
+    else Right (recur 0 [] l)
 end

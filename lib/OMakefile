@@ -2,7 +2,6 @@
 
 FILES[] =
   caramel_either
-  caramel_list_exceptionless
   caramel_list
   caramel
 

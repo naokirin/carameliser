@@ -1,14 +1,14 @@
 module List : sig
   include module type of ListLabels
 
-  include module type of Caramel_list_exceptionless
-
   (** [Invalid_index] which index is invalid *)
   exception Invalid_index of int
 
+  exception Invalid_empty
+
   (** [split_nth] split nth in the list.
       Riase Invalid_index if the index is out of bounds. *)
-  val split_nth: int -> 'a list -> ('a list * 'a list)
+  val split_nth: 'a list -> int -> ('a list * 'a list)
 
   (** [split_while] split while the function returned true. *)
   val split_while: f:('a -> bool) -> 'a list -> ('a list * 'a list)
@@ -35,7 +35,7 @@ module List : sig
   val rfind: f:('a -> bool) -> 'a list -> 'a
 
   (** [reduce ~f:f l] is apply the function to the element in l.
-      If elements is i0..iN, [reduce] is the same to f ((f i0 i1) i2) ...) iN.    [reduce] raises Invalid_argument if there is no element in l. *)
+      If elements is i0..iN, [reduce] is the same to f ((f i0 i1) i2) ...) iN.    [reduce] raises Invalid_empty if there is no element in l. *)
   val reduce: f:('a -> 'a -> 'a) -> 'a list -> 'a
 
   (** [unique] returns the list without any duplicate element.
@@ -44,7 +44,7 @@ module List : sig
 
   (** [drop] returns the list without the element of index.
       Raise Invalid_index if the index is out of bounds. *)
-  val drop: int -> 'a list -> 'a list
+  val drop: 'a list -> int -> 'a list
 
   (** [drop_while] returns the list without the element until the function returned false. *)
   val drop_while: f:('a -> bool) -> 'a list -> 'a list
@@ -57,7 +57,7 @@ module List : sig
 
   (** [take] takes nth elements in the list.
       Raise Invalid_index if the index is out of bounds. *)
-  val take: int -> 'a list -> 'a list
+  val take: 'a list -> int -> 'a list
 
   (** [take_while] returns the list until the function returned true. *)
   val take_while: f:('a -> bool) -> 'a list -> 'a list
@@ -68,11 +68,58 @@ module List : sig
 
   (** [make n a] returns the list containing a and to be length n.
       Raise Invalid_index if the index is out of bounds. *)
-  val make: int -> 'a -> 'a list
+  val make: 'a -> int -> 'a list
 
   (** [of_array] is the same as Array.to_list. *)
   val of_array: 'a array -> 'a list
 
   (** [to_array] is the same as Array.of_array. *)
   val to_array: 'a list -> 'a array
+
+  module Exceptionless : sig
+    open Caramel_either
+
+    (** [try_find] is similar to find, but does NOT raise Not_found.
+        Return to type Option, so it return None if there is no value that satisfies the received function in the list. *)
+    val try_find: f:('a -> bool) -> 'a list -> 'a option
+
+    (** [try_findi] is similar to findi, but does NOT raise Not_found. *)
+    val try_findi: f:(int -> 'a -> bool) -> 'a list -> (int * 'a) option
+
+    (** [try_rfind] is similar to rfind, but does NOT raise Not_found. *)
+    val try_rfind: f:('a -> bool) -> 'a list -> 'a option
+
+    (** [try_reduce] is the similar to reduce, but None if there is no element in the l. *)
+    val try_reduce: f:('a -> 'a -> 'a) -> 'a list -> (exn, 'a) either
+
+    (** [try_assoc] is the similar to assoc, but does NOT raise Not_found. *)
+    val try_assoc: 'a -> ('a * 'b) list -> (exn, 'b) either
+
+    (** [try_combine] is the similar to combine, but does NOT raise Invalid_argument *)
+    val try_combine: 'a list -> 'b list -> (exn, ('a * 'b) list) either
+
+    (** [try_split_nth] is the similar to combine, but does NOT raise Invalid_index. *)
+    val try_split_nth: 'a list -> int -> (exn, ('a list * 'a list)) either
+
+    (** [try_init] is the similar to init, but does NOT raise Invalid_index. *)
+    val try_init: f:(int -> 'a) -> int -> (exn, 'a list) either
+
+    (** [try_make] is the similar to make, but does NOT raise Invalid_index  *)
+    val try_make: 'a -> int -> (exn, 'a list) either
+
+    (** [try_take] is the similar to take, but does NOT raise Invalid_index. *)
+    val try_take: 'a list -> int -> (exn, 'a list) either
+
+    (** [try_drop] is the similar to drop, but does NOT raise Invalid_index. *)
+    val try_drop: 'a list -> int -> (exn, 'a list) either
+
+    (** [try_hd] is the similar to hd, but does NOT raise Failure. *)
+    val try_hd: 'a list -> (exn, 'a) either
+
+    (** [try_tl] is the similar to tl, but does NOT raise Failure. *)
+    val try_tl: 'a list -> (exn, 'a list) either
+
+    (** [try_nth] is the similar to nth, but does NOT raise Invalid_argument. *)
+    val try_nth: 'a list -> int -> (exn, 'a) either
+  end
 end

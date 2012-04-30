@@ -70,6 +70,12 @@ module List : sig
       Raise Invalid_index if the index is out of bounds. *)
   val make: 'a -> int -> 'a list
 
+  (** [sub] makes a sublist. *)
+  val sub: 'a list -> pos:int -> len:int -> 'a list
+
+  (** [stop] *)
+  val slice: 'a list -> start:int -> stop:int -> 'a list
+
   (** [of_array] is the same as Array.to_list. *)
   val of_array: 'a array -> 'a list
 
@@ -121,6 +127,12 @@ module List : sig
 
     (** [nth] is the similar to nth, but does NOT raise Invalid_argument. *)
     val nth: 'a list -> int -> 'a option
+
+    (** [sub] makes a sublist. *)
+    val sub: 'a list -> pos:int -> len:int -> 'a list option
+
+    (** [slice] makes a sublist. *)
+    val slice: 'a list -> start:int -> stop:int -> 'a list option
   end
 
 
@@ -169,6 +181,12 @@ module List : sig
 
     (** [try_nth] is the similar to nth, but does NOT raise Invalid_argument. *)
     val try_nth: 'a list -> int -> (exn, 'a) either
+
+    (** [try_sub] makes a sublist. *)
+    val try_sub: 'a list -> pos:int -> len:int -> (exn, 'a list) either
+
+    (** [try_slice] makes a sublist. *)
+    val try_slice: 'a list -> start:int -> stop:int -> (exn, 'a list) either
   end
 
 end

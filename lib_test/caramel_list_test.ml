@@ -162,6 +162,32 @@ let test =
         assert_raises ~msg:"minus"
           (Invalid_index ~-1) (fun () -> make 0 ~-1));
 
+    "sub" >::
+      (fun () ->
+        assert_equal ~msg:"sub"
+          [2;3] (sub [1;2;3;4] ~pos:1 ~len:2);
+        assert_equal ~msg:"len 0"
+          [] (sub [1;2;3] ~pos:0 ~len:0);
+        assert_equal ~msg:"empty"
+          [] (sub [] ~pos:0 ~len:0);
+        assert_raises ~msg:"pos over"
+          (Invalid_argument "List.sub") (fun () -> sub [1] ~pos:2 ~len:0);
+        assert_raises ~msg:"len over"
+          (Invalid_argument "List.sub") (fun () -> sub [1] ~pos:0 ~len:2));
+
+    "slice" >::
+      (fun () ->
+        assert_equal ~msg:"slice 1-2"
+          [2;3] (slice [1;2;3;4] ~start:1 ~stop:2);
+        assert_equal ~msg:"slice 0-0"
+          [1] (slice [1;2;3] ~start:0 ~stop:0);
+        assert_raises ~msg:"empty"
+          (Invalid_argument "List.slice") (fun () -> slice [] ~start:0 ~stop:0);
+        assert_raises ~msg:"start over"
+          (Invalid_argument "List.slice") (fun () -> slice [1] ~start:2 ~stop:2);
+        assert_raises ~msg:"stop over"
+          (Invalid_argument "List.slice") (fun () -> slice [1] ~start:0 ~stop:2));
+
     "of_array" >::
       (fun () ->
         assert_equal ~msg:"[|1; 2; 3|]"
@@ -204,75 +230,101 @@ let test =
           assert_equal ~msg:"empty"
             None (Optional.reduce [] ~f:(+)));
 
-      "try_assoc" >::
+      "assoc" >::
         (fun () ->
           assert_equal ~msg:"found"
             (Some "a") (Optional.assoc 1 [(1, "a"); (2, "b")]);
           assert_equal ~msg:"not found"
             None (Optional.assoc 1 [(2, "b")]));
 
-      "try_combine" >::
+      "combine" >::
         (fun () ->
           assert_equal ~msg:"combine"
             (Some [(1, 2); (3, 4)]) (Optional.combine [1; 3] [2; 4]);
           assert_equal ~msg:"failure"
             None (Optional.combine [1;2] [1]));
 
-      "try_split_nth" >::
+      "split_nth" >::
         (fun () ->
           assert_equal ~msg:"split"
             (Some ([1], [2;3])) (Optional.split_nth [1;2;3] 1);
           assert_equal ~msg:"invalid index"
             None (Optional.split_nth [1] 2));
 
-      "try_init" >::
+      "init" >::
         (fun () ->
           assert_equal ~msg:"init"
             (Some [1;1;1]) (Optional.init ~f:(fun i -> 1) 3);
           assert_equal ~msg:"failure"
             None (Optional.init ~f:(fun i -> 1)~-1));
 
-      "try_make" >::
+      "make" >::
         (fun () ->
           assert_equal ~msg:"make"
             (Some [1;1;1]) (Optional.make 1 3);
           assert_equal ~msg:"failure"
             None (Optional.make 1 ~-1));
 
-      "try_take" >::
+      "take" >::
         (fun () ->
           assert_equal ~msg:"take"
             (Some [1;2]) (Optional.take [1;2;3] 2);
           assert_equal ~msg:"invalid index"
             None (Optional.take [1;2;3] ~-1));
 
-      "try_drop" >::
+      "drop" >::
         (fun () ->
           assert_equal ~msg:"drop"
             (Some [2;3]) (Optional.drop [1;2;3] 1);
           assert_equal ~msg:"failure"
             None (Optional.drop [1;2;3] ~-1));
 
-      "try_hd" >::
+      "hd" >::
         (fun () ->
           assert_equal ~msg:"hd"
             (Some 1) (Optional.hd [1;2;3]);
           assert_equal ~msg:"failure"
             None (Optional.hd []));
 
-      "try_tl" >::
+      "tl" >::
         (fun () ->
           assert_equal ~msg:"tl"
             (Some [2;3]) (Optional.tl [1;2;3]);
           assert_equal ~msg:"failure"
             None (Optional.tl []));
 
-      "try_nth" >::
+      "nth" >::
         (fun () ->
           assert_equal ~msg:"nth"
             (Some 2) (Optional.nth [1;2;3] 1);
           assert_equal ~msg:"failure"
-            None (Optional.nth [1;2] ~-1))
+            None (Optional.nth [1;2] ~-1));
+
+      "sub" >::
+        (fun () ->
+          assert_equal ~msg:"sub"
+            (Some [2;3]) (Optional.sub [1;2;3;4] ~pos:1 ~len:2);
+          assert_equal ~msg:"len 0"
+            (Some []) (Optional.sub [1;2;3] ~pos:0 ~len:0);
+          assert_equal ~msg:"empty"
+            (Some []) (Optional.sub [] ~pos:0 ~len:0);
+          assert_equal ~msg:"pos over"
+            None (Optional.sub [1] ~pos:2 ~len:0);
+          assert_equal ~msg:"len over"
+            None (Optional.sub [1] ~pos:0 ~len:2));
+
+      "slice" >::
+        (fun () ->
+          assert_equal ~msg:"slice 1-2"
+            (Some [2;3]) (Optional.slice [1;2;3;4] ~start:1 ~stop:2);
+          assert_equal ~msg:"slice 0-0"
+            (Some [1]) (Optional.slice [1;2;3] ~start:0 ~stop:0);
+          assert_equal ~msg:"empty"
+            None (Optional.slice [] ~start:0 ~stop:0);
+          assert_equal ~msg:"start over"
+            None (Optional.slice [1] ~start:2 ~stop:2);
+          assert_equal ~msg:"stop over"
+            None (Optional.slice [1] ~start:0 ~stop:2));
     ];
 
     "Exceptionless" >:::
@@ -375,6 +427,32 @@ let test =
           assert_equal ~msg:"nth"
             (Right 2) (Exceptionless.try_nth [1;2;3] 1);
           assert_equal ~msg:"failure"
-            (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1))
+            (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1));
+
+      "try_sub" >::
+        (fun () ->
+          assert_equal ~msg:"sub"
+            (Right [2;3]) (Exceptionless.try_sub [1;2;3;4] ~pos:1 ~len:2);
+          assert_equal ~msg:"len 0"
+            (Right []) (Exceptionless.try_sub [1;2;3] ~pos:0 ~len:0);
+          assert_equal ~msg:"empty"
+            (Right []) (Exceptionless.try_sub [] ~pos:0 ~len:0);
+          assert_equal ~msg:"pos over"
+            (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:2 ~len:0);
+          assert_equal ~msg:"len over"
+            (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:0 ~len:2));
+
+      "try_slice" >::
+        (fun () ->
+          assert_equal ~msg:"slice 1-2"
+            (Right [2;3]) (Exceptionless.try_slice [1;2;3;4] ~start:1 ~stop:2);
+          assert_equal ~msg:"slice 0-0"
+            (Right [1]) (Exceptionless.try_slice [1;2;3] ~start:0 ~stop:0);
+          assert_equal ~msg:"empty"
+            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [] ~start:0 ~stop:0);
+          assert_equal ~msg:"start over"
+            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:2 ~stop:2);
+          assert_equal ~msg:"stop over"
+            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:0 ~stop:2));
       ]
     ]

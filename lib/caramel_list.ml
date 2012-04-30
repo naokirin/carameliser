@@ -123,6 +123,15 @@ module List = struct
     if n<0 then raise (Invalid_index n)
     else rev (recur 0 [])
 
+  let sub l ~pos ~len =
+    if (length l) < pos+len then invalid_arg "List.sub"
+    else take (drop l pos) len
+
+  let slice l ~start ~stop =
+    let len = length l in
+    if len<=0 || len<start || len<stop || stop<start then invalid_arg "List.slice"
+    else sub l ~pos:start ~len:(stop - start + 1)
+
   let of_array arr = Array.to_list arr
   let to_array l = Array.of_list l
 
@@ -143,6 +152,8 @@ module List = struct
     let hd l = ret_option hd l
     let tl l = ret_option tl l
     let nth l i = ret_option (nth l) i
+    let sub l ~pos ~len = ret_option (sub ~pos:pos ~len:len) l
+    let slice l ~start ~stop = ret_option (slice ~start:start ~stop:stop) l
   end
 
 
@@ -162,5 +173,7 @@ module List = struct
     let try_hd l = ret_either hd l
     let try_tl l = ret_either tl l
     let try_nth l i = ret_either (nth l) i
+    let try_sub l ~pos ~len = ret_either (sub ~pos:pos ~len:len) l
+    let try_slice l ~start ~stop = ret_either (slice ~start:start ~stop:stop) l
   end
 end

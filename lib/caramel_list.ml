@@ -1,6 +1,12 @@
 module List = struct
   include ListLabels
 
+  module T = struct
+    type 'a t = 'a list
+  end
+
+  include T
+
   exception Invalid_index of int
   exception Invalid_empty
 
@@ -134,6 +140,12 @@ module List = struct
 
   let of_array arr = Array.to_list arr
   let to_array l = Array.of_list l
+
+  let (@) = append
+
+  module Infix = struct
+    let (@) = append
+  end
 
 
   module Optional = struct

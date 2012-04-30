@@ -1,6 +1,7 @@
 .PHONY: all clean
 
 FILES[] =
+  caramel_monad
   caramel_either
   caramel_option
   caramel_list

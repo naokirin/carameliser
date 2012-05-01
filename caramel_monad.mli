@@ -26,5 +26,8 @@ module Monad : sig
     val ( >>| ) : 'a M.t -> ('a -> 'b) -> 'b M.t
     val bind : 'a M.t -> ('a -> 'b M.t) -> 'b M.t
     val return : 'a -> 'a M.t
+    val map: f:('a -> 'b) -> 'a M.t -> 'b M.t
+    val join: 'a M.t M.t -> 'a M.t
+    val ignore: 'a M.t -> unit M.t
   end
 end

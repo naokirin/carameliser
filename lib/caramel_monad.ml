@@ -19,15 +19,28 @@ module Monad = struct
 
     include Infix with type 'a t := 'a t
     include T with type 'a t := 'a t
+
+    val map: f:('a -> 'b) -> 'a t -> 'b t
+    val join: 'a t t -> 'a t
+    val ignore: 'a t -> unit t
+    val sequence : 'a t list -> 'a list t
   end
 
   module Make(M:T) : S with type 'a t := 'a M.t = struct
     include M
 
     let bind = M.bind
-    let return = return
+    let return = M.return
     let map ~f x = bind x (fun n -> return (f n))
-    let (>>=) = M.bind
+    let join m = bind m (fun x -> x)
+    let ignore t = map t ~f:(fun _ -> ())
+    let rec sequence = function
+      |[] -> return []
+      |x::xs ->
+        bind x (fun x ->
+          (bind (sequence xs) (fun xs ->
+            return (x::xs))))
+    let (>>=) = bind
     let (>>|) x f = map ~f x
   end
 end

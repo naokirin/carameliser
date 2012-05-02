@@ -15,4 +15,14 @@ module Option = struct
       Some (f x)
     with e ->
       None
+
+  module MaybeMonad = Caramel_monad.Monad.Make(struct
+    type 'a t = 'a option
+
+    let bind x f = match x with
+      | Some x -> f x
+      | None -> None
+
+    let return x = Some x
+  end)
 end

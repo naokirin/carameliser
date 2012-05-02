@@ -188,4 +188,11 @@ module List = struct
     let try_sub l ~pos ~len = ret_either (sub ~pos:pos ~len:len) l
     let try_slice l ~start ~stop = ret_either (slice ~start:start ~stop:stop) l
   end
+
+  module ListMonad = Caramel_monad.Monad.Make(struct
+    type 'a t = 'a list
+
+    let bind l f = List.concat (List.map f l)
+    let return x = [ x ]
+  end)
 end

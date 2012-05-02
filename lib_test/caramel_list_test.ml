@@ -170,9 +170,9 @@ let test =
           [] (sub [1;2;3] ~pos:0 ~len:0);
         assert_equal ~msg:"empty"
           [] (sub [] ~pos:0 ~len:0);
-        assert_raises ~msg:"pos over"
+        assert_raises ~msg:"over pos"
           (Invalid_argument "List.sub") (fun () -> sub [1] ~pos:2 ~len:0);
-        assert_raises ~msg:"len over"
+        assert_raises ~msg:"over len"
           (Invalid_argument "List.sub") (fun () -> sub [1] ~pos:0 ~len:2));
 
     "slice" >::
@@ -183,9 +183,9 @@ let test =
           [1] (slice [1;2;3] ~start:0 ~stop:0);
         assert_raises ~msg:"empty"
           (Invalid_argument "List.slice") (fun () -> slice [] ~start:0 ~stop:0);
-        assert_raises ~msg:"start over"
+        assert_raises ~msg:"over start"
           (Invalid_argument "List.slice") (fun () -> slice [1] ~start:2 ~stop:2);
-        assert_raises ~msg:"stop over"
+        assert_raises ~msg:"over stop"
           (Invalid_argument "List.slice") (fun () -> slice [1] ~start:0 ~stop:2));
 
     "of_array" >::
@@ -308,9 +308,9 @@ let test =
             (Some []) (Optional.sub [1;2;3] ~pos:0 ~len:0);
           assert_equal ~msg:"empty"
             (Some []) (Optional.sub [] ~pos:0 ~len:0);
-          assert_equal ~msg:"pos over"
+          assert_equal ~msg:"over pos"
             None (Optional.sub [1] ~pos:2 ~len:0);
-          assert_equal ~msg:"len over"
+          assert_equal ~msg:"over len"
             None (Optional.sub [1] ~pos:0 ~len:2));
 
       "slice" >::
@@ -321,9 +321,9 @@ let test =
             (Some [1]) (Optional.slice [1;2;3] ~start:0 ~stop:0);
           assert_equal ~msg:"empty"
             None (Optional.slice [] ~start:0 ~stop:0);
-          assert_equal ~msg:"start over"
+          assert_equal ~msg:"over start"
             None (Optional.slice [1] ~start:2 ~stop:2);
-          assert_equal ~msg:"stop over"
+          assert_equal ~msg:"over stop"
             None (Optional.slice [1] ~start:0 ~stop:2));
     ];
 
@@ -437,9 +437,9 @@ let test =
             (Right []) (Exceptionless.try_sub [1;2;3] ~pos:0 ~len:0);
           assert_equal ~msg:"empty"
             (Right []) (Exceptionless.try_sub [] ~pos:0 ~len:0);
-          assert_equal ~msg:"pos over"
+          assert_equal ~msg:"over pos"
             (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:2 ~len:0);
-          assert_equal ~msg:"len over"
+          assert_equal ~msg:"over len"
             (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:0 ~len:2));
 
       "try_slice" >::
@@ -450,9 +450,9 @@ let test =
             (Right [1]) (Exceptionless.try_slice [1;2;3] ~start:0 ~stop:0);
           assert_equal ~msg:"empty"
             (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [] ~start:0 ~stop:0);
-          assert_equal ~msg:"start over"
+          assert_equal ~msg:"over start"
             (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:2 ~stop:2);
-          assert_equal ~msg:"stop over"
+          assert_equal ~msg:"over stop"
             (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:0 ~stop:2));
-      ]
-    ]
+    ];
+  ]

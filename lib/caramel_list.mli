@@ -197,4 +197,6 @@ module List : sig
     (** [try_slice] makes a sublist. *)
     val try_slice: 'a t -> start:int -> stop:int -> (exn, 'a t) either
   end
+
+  module ListMonad : Caramel_monad.Monad.S with type 'a t := 'a list
 end

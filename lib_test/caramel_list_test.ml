@@ -1,5 +1,5 @@
 open OUnit
-open Caramel
+open Caramel.Either
 open Caramel.List
 
 let test =

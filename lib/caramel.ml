@@ -1,5 +1,5 @@
-include Caramel_monad
+module Monad = Caramel_monad
+module Option = Caramel_option
+module List = Caramel_list
 
-include Caramel_either
-include Caramel_option
-include Caramel_list
+module Either = Caramel_either

@@ -4,6 +4,7 @@ FILES[] =
   caramel_monad
   caramel_either
   caramel_option
+  caramel_lazy
   caramel_list
   caramel
 

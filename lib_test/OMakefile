@@ -5,6 +5,7 @@ FILES[] =
   caramel_utils_test
   caramel_option_test
   caramel_list_test
+  caramel_array_test
   test
 
 OCAMLPACKS[] =

@@ -5,4 +5,5 @@ let _ =
     (fun test -> ignore(run_test_tt test))
     [Caramel_list_test.test;
      Caramel_option_test.test;
-     Caramel_utils_test.test]
+     Caramel_utils_test.test;
+     Caramel_array_test.test]

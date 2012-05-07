@@ -1,3 +1,10 @@
+
+module T = struct
+  type 'a t = 'a option
+end
+
+include T
+
 let is_some = function
   |Some _ -> true
   |_ -> false

@@ -6,12 +6,32 @@ type 'a t = 'a array
 let add_last n arr =
   append arr [|n|]
 
+(*$T add_last
+  add_last 3 [|1;2|] = [|1; 2; 3|]
+*)
+
+
 let add_first n arr =
   append [|n|] arr
 
+(*$T add_first
+  add_first 1 [|2; 3|] = [|1; 2; 3|]
+*)
+
+
 let hd arr = arr.(0)
 
+(*$T hd
+  hd [|1; 2; 3|] = 1
+*)
+
+
 let tl arr = sub ~pos:1 ~len:((length arr)-1) arr
+
+(*$T tl
+  tl [|1; 2; 3|] = [|2; 3|]
+*)
+
 
 let filter ~f arr =
   let rec recur arrs = function
@@ -21,6 +41,11 @@ let filter ~f arr =
       else recur arrs (tl a)
   in
   recur [||] arr
+
+(*$T filter
+  filter ~f:(fun n -> n<3) [|1; 2; 3; 4|] = [|1; 2|]
+*)
+
 
 let filter_map ~f arr =
   let rec recur arrs = function
@@ -32,6 +57,12 @@ let filter_map ~f arr =
   in
   recur [||] arr
 
+(*$T filter_map
+  filter_map ~f:(fun n -> if n<3 then Some (n) else None) [|1;2;3;4|] \
+    = [|1; 2|]
+*)
+
+
 let reduce ~f arr =
   let rec recur n = function
     | [||] -> n
@@ -39,6 +70,11 @@ let reduce ~f arr =
   in
   if length arr < 2 then invalid_arg "Array.reduce"
   else recur arr.(0) (tl arr)
+
+(*$T reduce
+  reduce ~f:(fun n a -> n+a) [|1;2;3;4|] = 10
+*)
+
 
 let combine arr1 arr2 =
   let rec recur arrs a1 = function
@@ -48,13 +84,33 @@ let combine arr1 arr2 =
   if length arr1 <> length arr2 then invalid_arg "Array.combine"
   else recur [||] arr1 arr2
 
+(*$T combine
+  combine [|1;2|] [|3;4|] = [|(1,3); (2,4)|]
+*)
+
+
 let replace ~f arr i =
   let arr1 = (copy arr) in
   arr1.(i) <- f arr.(i); arr1
 
+(*$T replace
+  replace ~f:(fun i -> i+1) [|1;2;3|] 1 = [|1;3;3|]
+*)
+
+
 let split arr =
   fold_left ~init:([||], [||]) ~f:(fun result a -> ((add_last (fst a) (fst result)), (add_last (snd a) (snd result)))) arr
+
+(*$T split
+  split [|(1,2); (3,4)|] = ([|1; 3|], [|2; 4|])
+*)
+
 
 let is_empty = function
   | [||] -> true
   | _ -> false
+
+(*$T is_empty
+  is_empty [||]
+  not (is_empty [|1|])
+*)

@@ -270,24 +270,24 @@ module Optional = struct
 end
 
 
-module Exceptionless = struct
+module Of_either = struct
   open Caramel_either
-  let try_find ~f l = ret_either (find ~f:f) l
-  let try_findi ~f l = ret_either (findi ~f:f) l
-  let try_rfind ~f l = try_find ~f:f (rev l)
-  let try_reduce ~f l = ret_either (reduce ~f:f) l
-  let try_assoc n l = ret_either (assoc n) l
-  let try_combine l m = ret_either (combine l) m
-  let try_split_nth l n = ret_either (split_nth l) n
-  let try_init ~f n = ret_either (init ~f:f) n
-  let try_make n i = ret_either (make n) i
-  let try_take l i = ret_either (take l) i
-  let try_drop l i = ret_either (drop l) i
-  let try_hd l = ret_either hd l
-  let try_tl l = ret_either tl l
-  let try_nth l i = ret_either (nth l) i
-  let try_sub l ~pos ~len = ret_either (sub ~pos:pos ~len:len) l
-  let try_slice l ~start ~stop = ret_either (slice ~start:start ~stop:stop) l
+  let find ~f l = ret_either (find ~f:f) l
+  let findi ~f l = ret_either (findi ~f:f) l
+  let rfind ~f l = find ~f:f (rev l)
+  let reduce ~f l = ret_either (reduce ~f:f) l
+  let assoc n l = ret_either (assoc n) l
+  let combine l m = ret_either (combine l) m
+  let split_nth l n = ret_either (split_nth l) n
+  let init ~f n = ret_either (init ~f:f) n
+  let make n i = ret_either (make n) i
+  let take l i = ret_either (take l) i
+  let drop l i = ret_either (drop l) i
+  let hd l = ret_either hd l
+  let tl l = ret_either tl l
+  let nth l i = ret_either (nth l) i
+  let sub l ~pos ~len = ret_either (sub ~pos:pos ~len:len) l
+  let slice l ~start ~stop = ret_either (slice ~start:start ~stop:stop) l
 end
 
 module ListMonad = Caramel_monad.Make(struct

@@ -287,115 +287,115 @@ let test =
             None (Optional.slice [1] ~start:0 ~stop:2));
     ];
 
-    "Exceptionless" >::: [
-      "try_find" >:: (fun () ->
+    "Of_either" >::: [
+      "find" >:: (fun () ->
           assert_equal ~msg:"found"
-            (Right 2) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=2));
+            (Right 2) (Of_either.find [1; 2; 3] ~f:(fun n -> n=2));
           assert_equal ~msg:"not found"
-            (Left Not_found) (Exceptionless.try_find [1; 2; 3] ~f:(fun n -> n=5)));
+            (Left Not_found) (Of_either.find [1; 2; 3] ~f:(fun n -> n=5)));
 
-      "try_findi" >:: (fun () ->
+      "findi" >:: (fun () ->
           assert_equal ~msg:"found"
-            (Right (1, 2)) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
+            (Right (1, 2)) (Of_either.findi [1;2;3] ~f:(fun i n -> n=2 && i=1));
           assert_equal ~msg:"not_found"
-            (Left Not_found) (Exceptionless.try_findi [1;2;3] ~f:(fun i n -> n=5)));
+            (Left Not_found) (Of_either.findi [1;2;3] ~f:(fun i n -> n=5)));
 
-      "try_rfind" >:: (fun () ->
+      "rfind" >:: (fun () ->
           assert_equal ~msg:"found"
-            (Right 4) (Exceptionless.try_rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
+            (Right 4) (Of_either.rfind [1;2;3;4;5] ~f:(fun n -> (n mod 2)=0));
           assert_equal ~msg:"not found"
-            (Left Not_found) (Exceptionless.try_rfind [1;2;3] ~f:(fun n -> n=5)));
+            (Left Not_found) (Of_either.rfind [1;2;3] ~f:(fun n -> n=5)));
 
-      "try_reduce" >:: (fun () ->
+      "reduce" >:: (fun () ->
           assert_equal ~msg:"add 1..5"
-            (Right 15) (Exceptionless.try_reduce [1; 2; 3; 4; 5] ~f:(+));
+            (Right 15) (Of_either.reduce [1; 2; 3; 4; 5] ~f:(+));
           assert_equal ~msg:"concat string"
-            (Right "abcd") (Exceptionless.try_reduce ["a"; "b"; "c"; "d"] ~f:(^));
+            (Right "abcd") (Of_either.reduce ["a"; "b"; "c"; "d"] ~f:(^));
           assert_equal ~msg:"empty"
-            (Left Invalid_empty) (Exceptionless.try_reduce [] ~f:(+)));
+            (Left Invalid_empty) (Of_either.reduce [] ~f:(+)));
 
-      "try_assoc" >:: (fun () ->
+      "assoc" >:: (fun () ->
           assert_equal ~msg:"found"
-            (Right "a") (Exceptionless.try_assoc 1 [(1, "a"); (2, "b")]);
+            (Right "a") (Of_either.assoc 1 [(1, "a"); (2, "b")]);
           assert_equal ~msg:"not found"
-            (Left Not_found) (Exceptionless.try_assoc 1 [(2, "b")]));
+            (Left Not_found) (Of_either.assoc 1 [(2, "b")]));
 
-      "try_combine" >:: (fun () ->
+      "combine" >:: (fun () ->
           assert_equal ~msg:"combine"
-            (Right [(1, 2); (3, 4)]) (Exceptionless.try_combine [1; 3] [2; 4]);
+            (Right [(1, 2); (3, 4)]) (Of_either.combine [1; 3] [2; 4]);
           assert_equal ~msg:"failure"
-            (Left (Invalid_argument "List.combine")) (Exceptionless.try_combine [1;2] [1]));
+            (Left (Invalid_argument "List.combine")) (Of_either.combine [1;2] [1]));
 
-      "try_split_nth" >:: (fun () ->
+      "split_nth" >:: (fun () ->
           assert_equal ~msg:"split"
-            (Right ([1], [2;3])) (Exceptionless.try_split_nth [1;2;3] 1);
+            (Right ([1], [2;3])) (Of_either.split_nth [1;2;3] 1);
           assert_equal ~msg:"invalid index"
-            (Left (Invalid_index 2)) (Exceptionless.try_split_nth [1] 2));
+            (Left (Invalid_index 2)) (Of_either.split_nth [1] 2));
 
-      "try_init" >:: (fun () ->
+      "init" >:: (fun () ->
           assert_equal ~msg:"init"
-            (Right [1;1;1]) (Exceptionless.try_init ~f:(fun i -> 1) 3);
+            (Right [1;1;1]) (Of_either.init ~f:(fun i -> 1) 3);
           assert_equal ~msg:"failure"
-            (Left (Invalid_index ~-1)) (Exceptionless.try_init ~f:(fun i -> 1)~-1));
+            (Left (Invalid_index ~-1)) (Of_either.init ~f:(fun i -> 1)~-1));
 
-      "try_make" >:: (fun () ->
+      "make" >:: (fun () ->
           assert_equal ~msg:"make"
-            (Right [1;1;1]) (Exceptionless.try_make 1 3);
+            (Right [1;1;1]) (Of_either.make 1 3);
           assert_equal ~msg:"failure"
-            (Left (Invalid_index ~-1)) (Exceptionless.try_make 1 ~-1));
+            (Left (Invalid_index ~-1)) (Of_either.make 1 ~-1));
 
-      "try_take" >:: (fun () ->
+      "take" >:: (fun () ->
           assert_equal ~msg:"take"
-            (Right [1;2]) (Exceptionless.try_take [1;2;3] 2);
+            (Right [1;2]) (Of_either.take [1;2;3] 2);
           assert_equal ~msg:"invalid index"
-            (Left (Invalid_index ~-1)) (Exceptionless.try_take [1;2;3] ~-1));
+            (Left (Invalid_index ~-1)) (Of_either.take [1;2;3] ~-1));
 
-      "try_drop" >:: (fun () ->
+      "drop" >:: (fun () ->
           assert_equal ~msg:"drop"
-            (Right [2;3]) (Exceptionless.try_drop [1;2;3] 1);
+            (Right [2;3]) (Of_either.drop [1;2;3] 1);
           assert_equal ~msg:"failure"
-            (Left (Invalid_index ~-1)) (Exceptionless.try_drop [1;2;3] ~-1));
+            (Left (Invalid_index ~-1)) (Of_either.drop [1;2;3] ~-1));
 
-      "try_hd" >:: (fun () ->
+      "hd" >:: (fun () ->
           assert_equal ~msg:"hd"
-            (Right 1) (Exceptionless.try_hd [1;2;3]);
+            (Right 1) (Of_either.hd [1;2;3]);
           assert_equal ~msg:"failure"
-            (Left (Failure "hd")) (Exceptionless.try_hd []));
+            (Left (Failure "hd")) (Of_either.hd []));
 
-      "try_tl" >:: (fun () ->
+      "tl" >:: (fun () ->
           assert_equal ~msg:"tl"
-            (Right [2;3]) (Exceptionless.try_tl [1;2;3]);
+            (Right [2;3]) (Of_either.tl [1;2;3]);
           assert_equal ~msg:"failure"
-            (Left (Failure "tl")) (Exceptionless.try_tl []));
+            (Left (Failure "tl")) (Of_either.tl []));
 
-      "try_nth" >:: (fun () ->
+      "nth" >:: (fun () ->
           assert_equal ~msg:"nth"
-            (Right 2) (Exceptionless.try_nth [1;2;3] 1);
+            (Right 2) (Of_either.nth [1;2;3] 1);
           assert_equal ~msg:"failure"
-            (Left (Invalid_argument "List.nth")) (Exceptionless.try_nth [1;2] ~-1));
+            (Left (Invalid_argument "List.nth")) (Of_either.nth [1;2] ~-1));
 
-      "try_sub" >:: (fun () ->
+      "sub" >:: (fun () ->
           assert_equal ~msg:"sub"
-            (Right [2;3]) (Exceptionless.try_sub [1;2;3;4] ~pos:1 ~len:2);
+            (Right [2;3]) (Of_either.sub [1;2;3;4] ~pos:1 ~len:2);
           assert_equal ~msg:"len 0"
-            (Right []) (Exceptionless.try_sub [1;2;3] ~pos:0 ~len:0);
+            (Right []) (Of_either.sub [1;2;3] ~pos:0 ~len:0);
           assert_equal ~msg:"empty"
-            (Right []) (Exceptionless.try_sub [] ~pos:0 ~len:0);
+            (Right []) (Of_either.sub [] ~pos:0 ~len:0);
           assert_equal ~msg:"over pos"
-            (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:2 ~len:0);
+            (Left (Invalid_argument "List.sub")) (Of_either.sub [1] ~pos:2 ~len:0);
           assert_equal ~msg:"over len"
-            (Left (Invalid_argument "List.sub")) (Exceptionless.try_sub [1] ~pos:0 ~len:2));
+            (Left (Invalid_argument "List.sub")) (Of_either.sub [1] ~pos:0 ~len:2));
 
-      "try_slice" >:: (fun () ->
+      "slice" >:: (fun () ->
           assert_equal ~msg:"slice 1-2"
-            (Right [2;3]) (Exceptionless.try_slice [1;2;3;4] ~start:1 ~stop:2);
+            (Right [2;3]) (Of_either.slice [1;2;3;4] ~start:1 ~stop:2);
           assert_equal ~msg:"slice 0-0"
-            (Right [1]) (Exceptionless.try_slice [1;2;3] ~start:0 ~stop:0);
+            (Right [1]) (Of_either.slice [1;2;3] ~start:0 ~stop:0);
           assert_equal ~msg:"empty"
-            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [] ~start:0 ~stop:0);
+            (Left (Invalid_argument "List.slice")) (Of_either.slice [] ~start:0 ~stop:0);
           assert_equal ~msg:"over start"
-            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:2 ~stop:2);
+            (Left (Invalid_argument "List.slice")) (Of_either.slice [1] ~start:2 ~stop:2);
           assert_equal ~msg:"over stop"
-            (Left (Invalid_argument "List.slice")) (Exceptionless.try_slice [1] ~start:0 ~stop:2));
+            (Left (Invalid_argument "List.slice")) (Of_either.slice [1] ~start:0 ~stop:2));
     ];
   ]

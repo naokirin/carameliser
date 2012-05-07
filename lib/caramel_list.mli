@@ -144,57 +144,57 @@ module Optional : sig
 end
 
 
-(** In Module Exceptionless functions return value of either. *)
-module Exceptionless : sig
+(** In Module Of_either functions return value of either. *)
+module Of_either : sig
   open Caramel_either
 
-  (** [try_find] is similar to find, but does NOT raise Not_found. *)
-  val try_find: f:('a -> bool) -> 'a t -> (exn, 'a) either
+  (** [find] is similar to find, but does NOT raise Not_found. *)
+  val find: f:('a -> bool) -> 'a t -> (exn, 'a) either
 
-  (** [try_findi] is similar to findi, but does NOT raise Not_found. *)
-  val try_findi: f:(int -> 'a -> bool) -> 'a t -> (exn, (int * 'a)) either
+  (** [findi] is similar to findi, but does NOT raise Not_found. *)
+  val findi: f:(int -> 'a -> bool) -> 'a t -> (exn, (int * 'a)) either
 
-  (** [try_rfind] is similar to rfind, but does NOT raise Not_found. *)
-  val try_rfind: f:('a -> bool) -> 'a t -> (exn, 'a) either
+  (** [rfind] is similar to rfind, but does NOT raise Not_found. *)
+  val rfind: f:('a -> bool) -> 'a t -> (exn, 'a) either
 
-  (** [try_reduce] is the similar to reduce, but None if there is no element in the l. *)
-  val try_reduce: f:('a -> 'a -> 'a) -> 'a t -> (exn, 'a) either
+  (** [reduce] is the similar to reduce, but None if there is no element in the l. *)
+  val reduce: f:('a -> 'a -> 'a) -> 'a t -> (exn, 'a) either
 
-  (** [try_assoc] is the similar to assoc, but does NOT raise Not_found. *)
-  val try_assoc: 'a -> ('a * 'b) t -> (exn, 'b) either
+  (** [assoc] is the similar to assoc, but does NOT raise Not_found. *)
+  val assoc: 'a -> ('a * 'b) t -> (exn, 'b) either
 
-  (** [try_combine] is the similar to combine, but does NOT raise Invalid_argument *)
-  val try_combine: 'a t -> 'b t -> (exn, ('a * 'b) t) either
+  (** [combine] is the similar to combine, but does NOT raise Invalid_argument *)
+  val combine: 'a t -> 'b t -> (exn, ('a * 'b) t) either
 
-  (** [try_split_nth] is the similar to combine, but does NOT raise Invalid_index. *)
-  val try_split_nth: 'a t -> int -> (exn, ('a t * 'a t)) either
+  (** [split_nth] is the similar to combine, but does NOT raise Invalid_index. *)
+  val split_nth: 'a t -> int -> (exn, ('a t * 'a t)) either
 
-  (** [try_init] is the similar to init, but does NOT raise Invalid_index. *)
-  val try_init: f:(int -> 'a) -> int -> (exn, 'a t) either
+  (** [init] is the similar to init, but does NOT raise Invalid_index. *)
+  val init: f:(int -> 'a) -> int -> (exn, 'a t) either
 
-  (** [try_make] is the similar to make, but does NOT raise Invalid_index  *)
-  val try_make: 'a -> int -> (exn, 'a t) either
+  (** [make] is the similar to make, but does NOT raise Invalid_index  *)
+  val make: 'a -> int -> (exn, 'a t) either
 
-  (** [try_take] is the similar to take, but does NOT raise Invalid_index. *)
-  val try_take: 'a t -> int -> (exn, 'a t) either
+  (** [take] is the similar to take, but does NOT raise Invalid_index. *)
+  val take: 'a t -> int -> (exn, 'a t) either
 
-  (** [try_drop] is the similar to drop, but does NOT raise Invalid_index. *)
-  val try_drop: 'a t -> int -> (exn, 'a t) either
+  (** [drop] is the similar to drop, but does NOT raise Invalid_index. *)
+  val drop: 'a t -> int -> (exn, 'a t) either
 
-  (** [try_hd] is the similar to hd, but does NOT raise Failure. *)
-  val try_hd: 'a t -> (exn, 'a) either
+  (** [hd] is the similar to hd, but does NOT raise Failure. *)
+  val hd: 'a t -> (exn, 'a) either
 
-  (** [try_tl] is the similar to tl, but does NOT raise Failure. *)
-  val try_tl: 'a t -> (exn, 'a t) either
+  (** [tl] is the similar to tl, but does NOT raise Failure. *)
+  val tl: 'a t -> (exn, 'a t) either
 
-  (** [try_nth] is the similar to nth, but does NOT raise Invalid_argument. *)
-  val try_nth: 'a t -> int -> (exn, 'a) either
+  (** [nth] is the similar to nth, but does NOT raise Invalid_argument. *)
+  val nth: 'a t -> int -> (exn, 'a) either
 
-  (** [try_sub] makes a sublist. *)
-  val try_sub: 'a t -> pos:int -> len:int -> (exn, 'a t) either
+  (** [sub] makes a sublist. *)
+  val sub: 'a t -> pos:int -> len:int -> (exn, 'a t) either
 
-  (** [try_slice] makes a sublist. *)
-  val try_slice: 'a t -> start:int -> stop:int -> (exn, 'a t) either
+  (** [slice] makes a sublist. *)
+  val slice: 'a t -> start:int -> stop:int -> (exn, 'a t) either
 end
 
 module ListMonad : Caramel_monad.S with type 'a t := 'a list

@@ -151,3 +151,23 @@ let find_all ~f arr =
       if f n then recur (add_last n arrs) (tl a) else recur arrs (tl a)
   in
   recur [||] arr
+
+module Of_either = struct
+  module E = Caramel_either
+  let reduce ~f arr = E.ret_either (reduce ~f:f) arr
+  let combine arr1 arr2 = E.ret_either (combine arr1) arr2
+  let find ~f arr = E.ret_either (find ~f:f) arr
+  let findi ~f arr = E.ret_either (findi ~f:f) arr
+  let find_all ~f arr = E.ret_either (find_all ~f:f) arr
+  let get arr i = E.ret_either (get arr) i
+  let set arr i n = E.ret_either (set arr i) n
+  let make n x = E.ret_either (make n) x
+  let init i ~f = E.ret_either (init ~f:f) i
+  let make_matrix ~dimx ~dimy n =
+    E.ret_either (make_matrix ~dimx:dimx ~dimy:dimy) n
+  let sub arr ~pos ~len = E.ret_either (sub ~pos:pos ~len:len) arr
+  let fill arr ~pos ~len n =
+    E.ret_either (fill arr ~pos:pos ~len:len) n
+  let blit ~src ~src_pos ~dst ~dst_pos ~len =
+    E.ret_either (fun () -> blit ~src:src ~src_pos:src_pos ~dst:dst ~dst_pos:dst_pos ~len:len) ()
+end

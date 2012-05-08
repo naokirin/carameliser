@@ -54,6 +54,21 @@ val findi : f:(int -> 'a -> bool) -> 'a t -> (int * 'a)
 val find_all : f:('a -> bool) -> 'a t -> 'a t
 
 
+(** In Module Optional functions return value of option. *)
+module Optional : sig
+  val reduce : f:('a -> 'a -> 'a) -> 'a t -> 'a option
+  val combine :  'a t -> 'b t -> ('a * 'b) t option
+  val find : f:('a -> bool) -> 'a t -> 'a option
+  val findi : f:(int -> 'a -> bool) -> 'a t -> (int * 'a) option
+  val find_all : f:('a -> bool) -> 'a t -> 'a t option
+  val get : 'a array -> int -> 'a option
+  val make : int -> 'a -> 'a array option
+  val init : int -> f:(int -> 'a) -> 'a array option
+  val make_matrix : dimx:int -> dimy:int -> 'a -> 'a array array option
+  val sub : 'a array -> pos:int -> len:int -> 'a array option
+end
+
+
 (** In Module Of_Caramel_either.either functions return value of Caramel_either.either. *)
 module Of_either : sig
   val reduce : f:('a -> 'a -> 'a) -> 'a t -> (exn, 'a) Caramel_either.either
@@ -62,12 +77,9 @@ module Of_either : sig
   val findi : f:(int -> 'a -> bool) -> 'a t -> (exn, (int * 'a)) Caramel_either.either
   val find_all : f:('a -> bool) -> 'a t -> (exn, 'a t) Caramel_either.either
   val get : 'a array -> int -> (exn, 'a) Caramel_either.either
-  val set : 'a array -> int -> 'a -> (exn, unit) Caramel_either.either
   val make : int -> 'a -> (exn, 'a array) Caramel_either.either
   val init : int -> f:(int -> 'a) -> (exn, 'a array) Caramel_either.either
   val make_matrix : dimx:int -> dimy:int -> 'a -> (exn, 'a array array) Caramel_either.either
   val sub : 'a array -> pos:int -> len:int -> (exn, 'a array) Caramel_either.either
-  val fill : 'a array -> pos:int -> len:int -> 'a -> (exn, unit) Caramel_either.either
-val blit : src:'a array -> src_pos:int -> dst:'a array -> dst_pos:int -> len:int -> (exn, unit) Caramel_either.either
-
 end
+

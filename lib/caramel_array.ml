@@ -152,6 +152,23 @@ let find_all ~f arr =
   in
   recur [||] arr
 
+
+module Optional = struct
+  module Opt = Caramel_option
+  let reduce ~f arr = Opt.ret_option (reduce ~f:f) arr
+  let combine arr1 arr2 = Opt.ret_option (combine arr1) arr2
+  let find ~f arr = Opt.ret_option (find ~f:f) arr
+  let findi ~f arr = Opt.ret_option (findi ~f:f) arr
+  let find_all ~f arr = Opt.ret_option (find_all ~f:f) arr
+  let get arr i = Opt.ret_option (get arr) i
+  let make n x = Opt.ret_option (make n) x
+  let init i ~f = Opt.ret_option (init ~f:f) i
+  let make_matrix ~dimx ~dimy n =
+    Opt.ret_option (make_matrix ~dimx:dimx ~dimy:dimy) n
+  let sub arr ~pos ~len = Opt.ret_option (sub ~pos:pos ~len:len) arr
+end
+
+
 module Of_either = struct
   module E = Caramel_either
   let reduce ~f arr = E.ret_either (reduce ~f:f) arr
@@ -160,14 +177,10 @@ module Of_either = struct
   let findi ~f arr = E.ret_either (findi ~f:f) arr
   let find_all ~f arr = E.ret_either (find_all ~f:f) arr
   let get arr i = E.ret_either (get arr) i
-  let set arr i n = E.ret_either (set arr i) n
   let make n x = E.ret_either (make n) x
   let init i ~f = E.ret_either (init ~f:f) i
   let make_matrix ~dimx ~dimy n =
     E.ret_either (make_matrix ~dimx:dimx ~dimy:dimy) n
   let sub arr ~pos ~len = E.ret_either (sub ~pos:pos ~len:len) arr
-  let fill arr ~pos ~len n =
-    E.ret_either (fill arr ~pos:pos ~len:len) n
-  let blit ~src ~src_pos ~dst ~dst_pos ~len =
-    E.ret_either (fun () -> blit ~src:src ~src_pos:src_pos ~dst:dst ~dst_pos:dst_pos ~len:len) ()
 end
+

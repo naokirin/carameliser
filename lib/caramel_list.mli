@@ -91,7 +91,7 @@ module Infix : sig
 end
 
 
-(** In Module Optional functions return value of Caramel_either.either. *)
+(** In Module Optional functions return value of option. *)
 module Optional : sig
 
   (** [find] is similar to find, but does NOT raise Not_found. *)
@@ -196,4 +196,4 @@ module Of_either : sig
   val slice: 'a t -> start:int -> stop:int -> (exn, 'a t) Caramel_either.either
 end
 
-module ListMonad : Caramel_monad.S with type 'a t := 'a list
+module ListMonad : Caramel_monad.S with type 'a t := 'a t

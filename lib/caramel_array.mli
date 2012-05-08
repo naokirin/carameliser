@@ -34,3 +34,21 @@ val split : ('a * 'b) t -> ('a t * 'b t)
 
 (** [is_empty] is true if the array is empty. *)
 val is_empty : 'a t -> bool
+
+(** [collect] returns (f a1) @ (f a2) @ .. @ (f an). *)
+val collect : f:('a -> 'b t) -> 'a t -> 'b t
+
+(** [exists] returns true if the array exists the function return true. *)
+val exists : f:('a -> bool) -> 'a t -> bool
+
+(** [for_all] is true, for all elements in the array if the function return true.  *)
+val for_all : f:('a -> bool) -> 'a t -> bool
+
+(** [find] returns the first element that the function returns true. *)
+val find : f:('a -> bool) -> 'a t -> 'a
+
+(** [findi] returns the index and the first element that the function returns true. *)
+val findi : f:(int -> 'a -> bool) -> 'a t -> (int * 'a)
+
+(** [find_all] returns the array including all elements that the function returns true. *)
+val find_all : f:('a -> bool) -> 'a t -> 'a t

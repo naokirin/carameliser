@@ -114,3 +114,40 @@ let is_empty = function
   is_empty [||]
   not (is_empty [|1|])
 *)
+
+
+let collect ~f arr =
+  let rec recur = function
+    | [||] -> [||]
+    | _ as a ->
+      append (f (hd a)) (recur (tl a))
+  in
+  recur arr
+
+let exists ~f arr =
+  fold_left ~f:(fun p n -> p || (f n)) ~init:false arr
+
+let for_all ~f arr =
+  if is_empty arr then false
+  else fold_left ~f:(fun p n -> p && (f n)) ~init:true arr
+
+let rec find ~f = function
+  | [||] -> raise Not_found
+  | _ as a -> if f (hd a) then (hd a) else find ~f:f (tl a)
+
+let findi ~f arr =
+  let rec recur i = function
+    | [||] -> raise Not_found
+    | _ as a ->
+      let n = hd a in
+      if f i n then (i, n) else recur (i+1) (tl a)
+  in recur 0 arr
+
+let find_all ~f arr =
+  let rec recur arrs = function
+    | [||] -> if is_empty arrs then raise Not_found else arrs
+    | _ as a ->
+      let n = hd a in
+      if f n then recur (add_last n arrs) (tl a) else recur arrs (tl a)
+  in
+  recur [||] arr

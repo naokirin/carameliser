@@ -2,8 +2,7 @@ open OUnit
 open Caramel.Array
 
 let test =
-  "Caramel_array" >:::
-  [
+  "Caramel_array" >::: [
     "add_last" >:: (fun () ->
       assert_equal ~msg:"add 5"
         (add_last 5 [|1; 2; 3; 4|]) [|1; 2; 3; 4; 5|];
@@ -50,5 +49,45 @@ let test =
 
     "is_empty" >:: (fun () ->
       "empty" @? is_empty [||];
-      "not empty" @? not (is_empty [|1|]))
+      "not empty" @? not (is_empty [|1|]));
+
+    "collect" >:: (fun () ->
+      assert_equal ~msg:"collect"
+        (collect ~f:(fun n -> [|n+1; n+2|]) [|1; 2|]) [|2;3;3;4|]);
+
+    "exists" >:: (fun () ->
+      "exists" @? (exists ~f:(fun n -> n=1) [|0;1;2|]);
+      "not exists" @? not (exists ~f:(fun n -> n=1) [|0; 2; 3|]);
+      "empty" @? not (exists ~f:(fun n -> n=1) [||]));
+
+    "for_all" >:: (fun () ->
+      "for_all" @? (for_all ~f:(fun n -> n=1) [|1; 1; 1|]);
+      "not for_all" @? not (for_all ~f:(fun n -> n=1) [|1; 1; 2|]);
+      "empty" @? not (for_all ~f:(fun n -> n=1) [||]));
+
+    "find" >:: (fun () ->
+      assert_equal ~msg:"find 1"
+        (find ~f:(fun n -> n=1) [|1; 2; 3|]) 1;
+      assert_equal ~msg:"greater than 2"
+        (find ~f:(fun n -> n>2) [|1;2;3;4|]) 3;
+      assert_raises ~msg:"not found"
+        Not_found (fun () -> find ~f:(fun n -> n=1) [|2;3|]);
+      assert_raises ~msg:"empty"
+        Not_found (fun () -> find ~f:(fun n -> n=1) [||]));
+
+    "findi" >:: (fun () ->
+      assert_equal ~msg:"find i+n=3"
+        (findi ~f:(fun i n -> i+n=3) [|1;2;3|]) (1, 2);
+      assert_raises ~msg:"not found"
+        Not_found (fun () -> findi ~f:(fun i n -> i+n=3) [|1;1|]);
+      assert_raises ~msg:"empty"
+        Not_found (fun () -> findi ~f:(fun i n -> true) [||]););
+
+    "find_all" >:: (fun () ->
+      assert_equal ~msg:"greater than 2"
+        (find_all ~f:(fun n -> n>2) [|1;2;3;4|]) [|3;4|];
+      assert_raises ~msg:"not found"
+        Not_found (fun () -> find_all ~f:(fun n -> n=1) [|2;3|]);
+      assert_raises ~msg:"empty"
+        Not_found (fun () -> find_all ~f:(fun n -> n=1) [||]));
   ]

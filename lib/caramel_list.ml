@@ -271,23 +271,23 @@ end
 
 
 module Of_either = struct
-  open Caramel_either
-  let find ~f l = ret_either (find ~f:f) l
-  let findi ~f l = ret_either (findi ~f:f) l
-  let rfind ~f l = find ~f:f (rev l)
-  let reduce ~f l = ret_either (reduce ~f:f) l
-  let assoc n l = ret_either (assoc n) l
-  let combine l m = ret_either (combine l) m
-  let split_nth l n = ret_either (split_nth l) n
-  let init ~f n = ret_either (init ~f:f) n
-  let make n i = ret_either (make n) i
-  let take l i = ret_either (take l) i
-  let drop l i = ret_either (drop l) i
-  let hd l = ret_either hd l
-  let tl l = ret_either tl l
-  let nth l i = ret_either (nth l) i
-  let sub l ~pos ~len = ret_either (sub ~pos:pos ~len:len) l
-  let slice l ~start ~stop = ret_either (slice ~start:start ~stop:stop) l
+  module E = Caramel_either
+  let find ~f l = E.ret_either (find ~f:f) l
+  let findi ~f l = E.ret_either (findi ~f:f) l
+  let rfind ~f l = E.ret_either  (rfind ~f:f) l
+  let reduce ~f l = E.ret_either (reduce ~f:f) l
+  let assoc n l = E.ret_either (assoc n) l
+  let combine l m = E.ret_either (combine l) m
+  let split_nth l n = E.ret_either (split_nth l) n
+  let init ~f n = E.ret_either (init ~f:f) n
+  let make n i = E.ret_either (make n) i
+  let take l i = E.ret_either (take l) i
+  let drop l i = E.ret_either (drop l) i
+  let hd l = E.ret_either hd l
+  let tl l = E.ret_either tl l
+  let nth l i = E.ret_either (nth l) i
+  let sub l ~pos ~len = E.ret_either (sub ~pos:pos ~len:len) l
+  let slice l ~start ~stop = E.ret_either (slice ~start:start ~stop:stop) l
 end
 
 module ListMonad = Caramel_monad.Make(struct

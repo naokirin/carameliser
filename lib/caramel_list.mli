@@ -91,7 +91,7 @@ module Infix : sig
 end
 
 
-(** In Module Optional functions return value of either. *)
+(** In Module Optional functions return value of Caramel_either.either. *)
 module Optional : sig
 
   (** [find] is similar to find, but does NOT raise Not_found. *)
@@ -144,57 +144,56 @@ module Optional : sig
 end
 
 
-(** In Module Of_either functions return value of either. *)
+(** In Module Of_Caramel_either.either functions return value of Caramel_either.either. *)
 module Of_either : sig
-  open Caramel_either
 
   (** [find] is similar to find, but does NOT raise Not_found. *)
-  val find: f:('a -> bool) -> 'a t -> (exn, 'a) either
+  val find: f:('a -> bool) -> 'a t -> (exn, 'a) Caramel_either.either
 
   (** [findi] is similar to findi, but does NOT raise Not_found. *)
-  val findi: f:(int -> 'a -> bool) -> 'a t -> (exn, (int * 'a)) either
+  val findi: f:(int -> 'a -> bool) -> 'a t -> (exn, (int * 'a)) Caramel_either.either
 
   (** [rfind] is similar to rfind, but does NOT raise Not_found. *)
-  val rfind: f:('a -> bool) -> 'a t -> (exn, 'a) either
+  val rfind: f:('a -> bool) -> 'a t -> (exn, 'a) Caramel_either.either
 
   (** [reduce] is the similar to reduce, but None if there is no element in the l. *)
-  val reduce: f:('a -> 'a -> 'a) -> 'a t -> (exn, 'a) either
+  val reduce: f:('a -> 'a -> 'a) -> 'a t -> (exn, 'a) Caramel_either.either
 
   (** [assoc] is the similar to assoc, but does NOT raise Not_found. *)
-  val assoc: 'a -> ('a * 'b) t -> (exn, 'b) either
+  val assoc: 'a -> ('a * 'b) t -> (exn, 'b) Caramel_either.either
 
   (** [combine] is the similar to combine, but does NOT raise Invalid_argument *)
-  val combine: 'a t -> 'b t -> (exn, ('a * 'b) t) either
+  val combine: 'a t -> 'b t -> (exn, ('a * 'b) t) Caramel_either.either
 
   (** [split_nth] is the similar to combine, but does NOT raise Invalid_index. *)
-  val split_nth: 'a t -> int -> (exn, ('a t * 'a t)) either
+  val split_nth: 'a t -> int -> (exn, ('a t * 'a t)) Caramel_either.either
 
   (** [init] is the similar to init, but does NOT raise Invalid_index. *)
-  val init: f:(int -> 'a) -> int -> (exn, 'a t) either
+  val init: f:(int -> 'a) -> int -> (exn, 'a t) Caramel_either.either
 
   (** [make] is the similar to make, but does NOT raise Invalid_index  *)
-  val make: 'a -> int -> (exn, 'a t) either
+  val make: 'a -> int -> (exn, 'a t) Caramel_either.either
 
   (** [take] is the similar to take, but does NOT raise Invalid_index. *)
-  val take: 'a t -> int -> (exn, 'a t) either
+  val take: 'a t -> int -> (exn, 'a t) Caramel_either.either
 
   (** [drop] is the similar to drop, but does NOT raise Invalid_index. *)
-  val drop: 'a t -> int -> (exn, 'a t) either
+  val drop: 'a t -> int -> (exn, 'a t) Caramel_either.either
 
   (** [hd] is the similar to hd, but does NOT raise Failure. *)
-  val hd: 'a t -> (exn, 'a) either
+  val hd: 'a t -> (exn, 'a) Caramel_either.either
 
   (** [tl] is the similar to tl, but does NOT raise Failure. *)
-  val tl: 'a t -> (exn, 'a t) either
+  val tl: 'a t -> (exn, 'a t) Caramel_either.either
 
   (** [nth] is the similar to nth, but does NOT raise Invalid_argument. *)
-  val nth: 'a t -> int -> (exn, 'a) either
+  val nth: 'a t -> int -> (exn, 'a) Caramel_either.either
 
   (** [sub] makes a sublist. *)
-  val sub: 'a t -> pos:int -> len:int -> (exn, 'a t) either
+  val sub: 'a t -> pos:int -> len:int -> (exn, 'a t) Caramel_either.either
 
   (** [slice] makes a sublist. *)
-  val slice: 'a t -> start:int -> stop:int -> (exn, 'a t) either
+  val slice: 'a t -> start:int -> stop:int -> (exn, 'a t) Caramel_either.either
 end
 
 module ListMonad : Caramel_monad.S with type 'a t := 'a list

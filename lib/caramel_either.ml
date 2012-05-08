@@ -2,6 +2,12 @@ type ('a, 'b) either =
   |Left of 'a
   |Right of 'b
 
+module T = struct
+  type ('a, 'b) t = ('a, 'b) either
+end
+
+include T
+
 let ret_either ~f x =
   try
     Right (f x)

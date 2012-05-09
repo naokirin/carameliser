@@ -1,6 +1,49 @@
-include module type of ListLabels
-
 type 'a t = 'a list
+
+val length : 'a t -> int
+val hd : 'a t -> 'a
+val tl : 'a t -> 'a t
+val nth : 'a t -> int -> 'a
+val rev : 'a t -> 'a t
+val append : 'a t -> 'a t -> 'a t
+val rev_append : 'a t -> 'a t -> 'a t
+val concat : 'a t t -> 'a t
+val flatten : 'a t t -> 'a t
+val iter : f:('a -> unit) -> 'a t -> unit
+val map : f:('a -> 'b) -> 'a t -> 'b t
+val rev_map : f:('a -> 'b) -> 'a t -> 'b t
+val fold_left : f:('a -> 'b -> 'a) -> init:'a -> 'b t -> 'a
+val fold_right : f:('a -> 'b -> 'b) -> 'a t -> init:'b -> 'b
+val iter2 : f:('a -> 'b -> unit) -> 'a t -> 'b t -> unit
+val map2 : f:('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+val rev_map2 : f:('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+val fold_left2 :
+f:('a -> 'b -> 'c -> 'a) -> init:'a -> 'b t -> 'c t -> 'a
+val fold_right2 :
+f:('a -> 'b -> 'c -> 'c) -> 'a t -> 'b t -> init:'c -> 'c
+val for_all : f:('a -> bool) -> 'a t -> bool
+val exists : f:('a -> bool) -> 'a t -> bool
+val for_all2 : f:('a -> 'b -> bool) -> 'a t -> 'b t -> bool
+val exists2 : f:('a -> 'b -> bool) -> 'a t -> 'b t -> bool
+val mem : 'a -> set:'a t -> bool
+val memq : 'a -> set:'a t -> bool
+val find : f:('a -> bool) -> 'a t -> 'a
+val filter : f:('a -> bool) -> 'a t -> 'a t
+val find_all : f:('a -> bool) -> 'a t -> 'a t
+val partition : f:('a -> bool) -> 'a t -> 'a t * 'a t
+val assoc : 'a -> ('a * 'b) t -> 'b
+val assq : 'a -> ('a * 'b) t -> 'b
+val mem_assoc : 'a -> map:('a * 'b) t -> bool
+val mem_assq : 'a -> map:('a * 'b) t -> bool
+val remove_assoc : 'a -> ('a * 'b) t -> ('a * 'b) t
+val remove_assq : 'a -> ('a * 'b) t -> ('a * 'b) t
+val split : ('a * 'b) t -> 'a t * 'b t
+val combine : 'a t -> 'b t -> ('a * 'b) t
+val sort : cmp:('a -> 'a -> int) -> 'a t -> 'a t
+val stable_sort : cmp:('a -> 'a -> int) -> 'a t -> 'a t
+val fast_sort : cmp:('a -> 'a -> int) -> 'a t -> 'a t
+val merge : cmp:('a -> 'a -> int) -> 'a t -> 'a t -> 'a t
+
 
 (** [Invalid_index] which index is invalid *)
 exception Invalid_index of int

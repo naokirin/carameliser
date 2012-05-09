@@ -1,10 +1,51 @@
-include ListLabels
-
 module T = struct
   type 'a t = 'a list
 end
 
 include T
+
+let length = ListLabels.length
+let hd = ListLabels.hd
+let tl = ListLabels.tl
+let nth = ListLabels.nth
+let rev = ListLabels.rev
+let append = ListLabels.append
+let rev_append = ListLabels.rev_append
+let concat = ListLabels.concat
+let flatten = ListLabels.flatten
+let iter = ListLabels.iter
+let map = ListLabels.map
+let rev_map = ListLabels.rev_map
+let fold_left = ListLabels.fold_left
+let fold_right = ListLabels.fold_right
+let iter2 = ListLabels.iter2
+let map2 = ListLabels.map2
+let rev_map2 = ListLabels.rev_map2
+let fold_left2 = ListLabels.fold_left2
+let fold_right2 = ListLabels.fold_right2
+let for_all = ListLabels.for_all
+let exists = ListLabels.exists
+let for_all2 = ListLabels.for_all2
+let exists2 = ListLabels.exists2
+let mem = ListLabels.mem
+let memq = ListLabels.memq
+let find = ListLabels.find
+let filter = ListLabels.filter
+let find_all = ListLabels.find_all
+let partition = ListLabels.partition
+let assoc = ListLabels.assoc
+let assq = ListLabels.assq
+let mem_assoc = ListLabels.mem_assoc
+let mem_assq = ListLabels.mem_assq
+let remove_assoc = ListLabels.remove_assoc
+let remove_assq = ListLabels.remove_assq
+let split = ListLabels.split
+let combine = ListLabels.combine
+let sort = ListLabels.sort
+let stable_sort = ListLabels.stable_sort
+let fast_sort = ListLabels.fast_sort
+let merge = ListLabels.merge
+
 
 exception Invalid_index of int
 exception Invalid_empty

@@ -168,12 +168,20 @@ let test =
           (Invalid_argument "List.slice") (fun () -> slice [1] ~start:0 ~stop:2));
 
     "of_array" >:: (fun () ->
-        assert_equal ~msg:"[|1; 2; 3|]"
-          [1; 2; 3] (of_array [|1; 2; 3|]));
+      assert_equal ~msg:"[|1; 2; 3|]"
+        [1; 2; 3] (of_array [|1; 2; 3|]));
 
     "to_array" >:: (fun () ->
-        assert_equal ~msg:"[1; 2; 3]"
-          [|1; 2; 3|] (to_array [1; 2; 3]));
+      assert_equal ~msg:"[1; 2; 3]"
+        [|1; 2; 3|] (to_array [1; 2; 3]));
+
+    "of_char" >:: (fun () ->
+      assert_equal ~msg:"abcde"
+        ['a'; 'b'; 'c'; 'd'; 'e'] (of_char "abcde"));
+
+    "to_string" >:: (fun () ->
+      assert_equal ~msg:"abcde"
+        "abcde" (to_string ['a'; 'b'; 'c'; 'd'; 'e']));
 
     "Optional" >::: [
       "find" >:: (fun () ->

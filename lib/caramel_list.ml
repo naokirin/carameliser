@@ -284,6 +284,23 @@ let slice l ~start ~stop =
 let of_array arr = Array.to_list arr
 let to_array l = Array.of_list l
 
+let of_char str =
+  let result = ref [] in
+  String.iter (fun c -> result := c::!result) str; rev !result
+
+(*$T of_char
+  of_char "abcde" = ['a'; 'b'; 'c'; 'd'; 'e']
+*)
+
+
+let to_string l =
+  fold_left ~f:(fun p n -> p ^ (String.make 1 n)) ~init:"" l
+
+(*$T to_string
+  to_string ['a'; 'b'; 'c'; 'd'; 'e'] = "abcde"
+*)
+
+
 let (@) = append
 
 module Infix = struct

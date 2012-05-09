@@ -118,13 +118,19 @@ val make: 'a -> int -> 'a t
 val sub: 'a t -> pos:int -> len:int -> 'a t
 
 (** [stop] *)
-val slice: 'a t -> start:int -> stop:int -> 'a t
+val slice : 'a t -> start:int -> stop:int -> 'a t
 
 (** [of_array] is the same as Array.to_list. *)
-val of_array: 'a array -> 'a t
+val of_array : 'a array -> 'a t
 
-(** [to_array] is the same as Array.of_array. *)
-val to_array: 'a t -> 'a array
+(** [to_array] is the same as Array.of_list. *)
+val to_array : 'a t -> 'a array
+
+(** [of_char] transform to char list from string. *)
+val of_char : string -> char t
+
+(** [to_string] transform to string from char list. *)
+val to_string : char t -> string
 
 val (@): 'a t -> 'a t -> 'a t
 

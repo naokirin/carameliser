@@ -1,7 +1,39 @@
 
-include ArrayLabels
+module T = struct
+  type 'a t = 'a array
+end
 
-type 'a t = 'a array
+include T
+
+
+let length = ArrayLabels.length
+let get = ArrayLabels.get
+let set = ArrayLabels.set
+let make = ArrayLabels.make
+let create = ArrayLabels.create
+let init = ArrayLabels.init
+let make_matrix = ArrayLabels.make_matrix
+let create_matrix = ArrayLabels.create_matrix
+let append = ArrayLabels.append
+let concat = ArrayLabels.concat
+let sub = ArrayLabels.sub
+let copy = ArrayLabels.copy
+let fill = ArrayLabels.fill
+let blit = ArrayLabels.blit
+let to_list = ArrayLabels.to_list
+let of_list = ArrayLabels.of_list
+let iter = ArrayLabels.iter
+let map = ArrayLabels.map
+let iteri = ArrayLabels.iteri
+let mapi = ArrayLabels.mapi
+let fold_left = ArrayLabels.fold_left
+let fold_right = ArrayLabels.fold_right
+let sort = ArrayLabels.sort
+let stable_sort = ArrayLabels.stable_sort
+let fast_sort = ArrayLabels.fast_sort
+let unsafe_get = ArrayLabels.unsafe_get
+let unsafe_set = ArrayLabels.unsafe_set
+
 
 let add_last n arr =
   append arr [|n|]

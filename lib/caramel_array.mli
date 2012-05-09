@@ -1,6 +1,35 @@
-include module type of ArrayLabels
-
 type 'a t = 'a array
+
+(** the functions in ArrayLabels. *)
+val length : 'a t -> int
+val get : 'a t -> int -> 'a
+val set : 'a t -> int -> 'a -> unit
+val make : int -> 'a -> 'a t
+val create : int -> 'a -> 'a t
+val init : int -> f:(int -> 'a) -> 'a t
+val make_matrix : dimx:int -> dimy:int -> 'a -> 'a t t
+val create_matrix : dimx:int -> dimy:int -> 'a -> 'a t t
+val append : 'a t -> 'a t -> 'a t
+val concat : 'a t list -> 'a t
+val sub : 'a t -> pos:int -> len:int -> 'a t
+val copy : 'a t -> 'a t
+val fill : 'a t -> pos:int -> len:int -> 'a -> unit
+val blit : src:'a t -> src_pos:int -> dst:'a t -> dst_pos:int -> len:int -> unit
+val to_list : 'a t -> 'a list
+val of_list : 'a list -> 'a t
+val iter : f:('a -> unit) -> 'a t -> unit
+val map : f:('a -> 'b) -> 'a t -> 'b t
+val iteri : f:(int -> 'a -> unit) -> 'a t -> unit
+val mapi : f:(int -> 'a -> 'b) -> 'a t -> 'b t
+val fold_left : f:('a -> 'b -> 'a) -> init:'a -> 'b t -> 'a
+val fold_right : f:('b -> 'a -> 'a) -> 'b t -> init:'a -> 'a
+val sort : cmp:('a -> 'a -> int) -> 'a t -> unit
+val stable_sort : cmp:('a -> 'a -> int) -> 'a t -> unit
+val fast_sort : cmp:('a -> 'a -> int) -> 'a t -> unit
+val unsafe_get : 'a t -> int -> 'a
+val unsafe_set : 'a t -> int -> 'a -> unit
+
+
 
 (** [add_last] add the value at the last. *)
 val add_last : 'a -> 'a t -> 'a t

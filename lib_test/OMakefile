@@ -6,10 +6,12 @@ FILES[] =
   caramel_option_test
   caramel_list_test
   caramel_array_test
+  caramel_num_test
   test
 
 OCAMLPACKS[] =
   oUnit
+  num
 
 PROGRAM = test
 OCAML_LIBS += ../lib/caramel

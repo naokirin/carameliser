@@ -5,3 +5,4 @@ module Either = Caramel_either
 module List = Caramel_list
 module Array = Caramel_array
 module Lazy = Caramel_lazy
+module Num = Caramel_num

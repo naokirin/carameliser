@@ -8,9 +8,13 @@ FILES[] =
   caramel_lazy
   caramel_list
   caramel_array
+  caramel_num
   caramel
 
 LIB = caramel
+
+OCAMLPACKS[] =
+	num
 
 .DEFAULT : all
 

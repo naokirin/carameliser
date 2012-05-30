@@ -1,6 +1,6 @@
 name="carameliser"
 version="0.1"
 description="carameliser for a putit library"
-requires=""
+requires="num"
 archive(byte)="caramel.cma"
 

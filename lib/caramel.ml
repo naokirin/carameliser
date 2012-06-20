@@ -5,4 +5,6 @@ module Either = Caramel_either
 module List = Caramel_list
 module Array = Caramel_array
 module Lazy = Caramel_lazy
+module Lazy_stream = Caramel_lazy_stream
+module Parser = Caramel_parser
 module Num = Caramel_num

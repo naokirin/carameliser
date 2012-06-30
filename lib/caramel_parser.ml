@@ -57,7 +57,8 @@ and fold1 ~f ~init p = p >>= fun x -> fold ~f:f ~init:(f init x) p
 
 let is c = token (fun x -> if x = c then Some x else None)
 let is_not c = token (fun x -> if x <> c then Some x else None)
-let any c = token (fun x -> Some x)
+
+let something c = token (fun x -> Some x) c
 
 let ( >>* ) p p' = p >>= fun _ -> p'
 let ( *>> ) p p' s =

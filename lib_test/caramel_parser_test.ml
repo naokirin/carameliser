@@ -33,6 +33,12 @@ let test =
     "parse combinating string" >:: (fun () ->
       assert_equal ~msg:"parse the secound charactor"
         (Some "ab   1234") (parse (letters &>> spaces &>> numbers) (stream_of_string "ab   1234 abc")));
+
+    "parse with ( *>> ) or ( +>> )" >:: (fun () ->
+      assert_equal ~msg:"parse with *>>"
+        None (parse (letters *>> spaces >>* letters) (stream_of_string "abc   def"));
+      assert_equal ~msg:"parse with +>>"
+        (Some "def") (parse (letters +>> spaces >>+ letters) (stream_of_string "abc   def")))
   ]
 
 
@@ -45,6 +51,10 @@ let p = perform with module Caramel.Parser in
   Caramel.Parser.return (a^b) in
   parse p (stream_of_string "1 0")
 *)
+
+
+
+
 
 
 

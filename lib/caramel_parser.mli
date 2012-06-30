@@ -42,7 +42,7 @@ module String_parser : sig
   val stream_of_string : string -> string stream
 
   val ( &>> ) : (string, string) parser -> (string, string) parser -> (string, string) parser
-  val ( >>& ) : (string, string) parser -> (string, string) parser -> (string, string) parser
+  val ( $>> ) : (string, string) parser -> (string, string) parser -> (string, string) parser
 
   val foldstr : (string, string) parser -> (string, string) parser
   val foldstr1 : (string, string) parser -> (string, string) parser

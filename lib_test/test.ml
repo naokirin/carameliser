@@ -7,4 +7,5 @@ let _ =
      Caramel_option_test.test;
      Caramel_utils_test.test;
      Caramel_array_test.test;
-     Caramel_num_test.test]
+     Caramel_num_test.test;
+     Caramel_parser_test.test]

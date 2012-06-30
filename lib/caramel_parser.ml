@@ -76,7 +76,7 @@ module String_parser = struct
   let stream_of_string s = Caramel_lazy_stream.of_string s
 
   let ( &>> ) p p' = p >>= fun x -> fold1 ~f:(fun y z -> y^z) ~init:((fun y z -> y^z) "" x) p'
-  let ( >>& ) p p' = p >>= fun x -> fold ~f:(fun y z -> y^z) ~init:((fun y z -> y^z) "" x) p'
+  let ( $>> ) p p' = p >>= fun x -> fold ~f:(fun y z -> y^z) ~init:((fun y z -> y^z) "" x) p'
 
   let foldstr p = fold ~f:(fun x y -> x^y) ~init:"" p
   let foldstr1 p = fold1 ~f:(fun x y -> x^y) ~init:"" p

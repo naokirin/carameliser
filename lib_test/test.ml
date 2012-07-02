@@ -8,4 +8,15 @@ let _ =
      Caramel_utils_test.test;
      Caramel_array_test.test;
      Caramel_num_test.test;
-     Caramel_parser_test.test]
+     Caramel_parser_test.test;
+     Caramel_string_test.test]
+
+
+
+
+
+
+
+
+
+

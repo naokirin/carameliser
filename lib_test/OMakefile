@@ -8,6 +8,7 @@ FILES[] =
   caramel_array_test
   caramel_num_test
   caramel_parser_test
+  caramel_string_test
   test
 
 OCAMLPACKS[] =

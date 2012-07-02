@@ -8,6 +8,7 @@ FILES[] =
   caramel_lazy
   caramel_list
   caramel_array
+  caramel_string
   caramel_lazy_stream
   caramel_parser
   caramel_num

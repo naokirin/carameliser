@@ -4,6 +4,7 @@ module Option = Caramel_option
 module Either = Caramel_either
 module List = Caramel_list
 module Array = Caramel_array
+module String = Caramel_string
 module Lazy = Caramel_lazy
 module Lazy_stream = Caramel_lazy_stream
 module Parser = Caramel_parser

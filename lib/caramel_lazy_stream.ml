@@ -14,8 +14,8 @@ let of_list lst =
     if n < (List.length lst) then Some (List.nth lst n) else None)
 
 let of_string str =
-  from (fun n ->
-    if n < (String.length str) then Some String.(make 1 (String.get str n)) else None)  
+  from Caramel_string.(fun n ->
+    if n < (length str) then Some (string_of_char (String.get str n)) else None)  
 
 let rec of_channel chan =
   from (fun n ->

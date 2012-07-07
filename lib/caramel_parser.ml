@@ -83,7 +83,7 @@ module String_parser = struct
   let foldstr1 p = fold1 ~f:(fun x y -> x^y) ~init:"" p
 
   let something_of s f =
-    let lst = Caramel_list.(collect (of_char s) ~f:(fun c -> [String.make 1 c])) in
+    let lst = Caramel_list.(collect (of_char s) ~f:(fun c -> [Caramel_string.string_of_char c])) in
     let lst' = Caramel_list.collect lst ~f:(fun x -> [f x]) in
     Caramel_list.(fold_left (tl lst') ~init:(hd lst') ~f:(fun x x' -> x <|> x'))
 
@@ -92,7 +92,7 @@ module String_parser = struct
   let many_of s = (fold1 ~f:(fun x y -> x^y) ~init:"" (one_of s))
 
   let parse_string s =
-    let lst = Caramel_list.(collect (of_char s) ~f:(fun c -> [is (String.make 1 c)])) in
+    let lst = Caramel_list.(collect (of_char s) ~f:(fun c -> [is (Caramel_string.string_of_char c)])) in
     Caramel_list.(fold_left (tl lst) ~f:(fun x y -> x &>> y) ~init:(hd lst))
 
   let lower = one_of "abcdefghijklmnopqrstuvwxyz"

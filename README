@@ -1,0 +1,10 @@
+"carameliser" is a extended standard library in OCaml.
+
+You can use this library without other libraries.
+
+
+License
+Copyright 2012- naokirin
+
+Licensed under the MIT License
+http://www.opensource.org/licenses/mit-license.php

@@ -348,9 +348,17 @@ module Of_either = struct
   let slice l ~start ~stop = E.ret_either (slice ~start:start ~stop:stop) l
 end
 
-module ListMonad = Caramel_monad.Make(struct
-  type 'a t = 'a list
+module ListMonad = struct
+  include Caramel_monad.Make(struct
+    type 'a t = 'a list
 
-  let bind l f = List.concat (List.map f l)
-  let return x = [ x ]
-end)
+    let bind l f = List.concat (List.map f l)
+    let return x = [ x ]
+  end)
+
+  let guard c =
+    if c then
+      return ()
+    else
+      []
+end

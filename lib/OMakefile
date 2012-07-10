@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean install uninstall
 
 FILES[] =
   caramel_utils
@@ -22,6 +22,12 @@ OCAMLPACKS[] =
 .DEFAULT : all
 
 all : $(OCamlLibrary $(LIB), $(FILES))
+
+install :
+	ocamlfind install carameliser META caramel.cma caramel.cmxa caramel.cmi
+
+uninstall :
+	ocamlfind remove carameliser
 
 clean:
 	rm -f *~ *.opt *.cmi *.cmx *.cmo *.omc *.cma *.cmxa *.o *.a *.out

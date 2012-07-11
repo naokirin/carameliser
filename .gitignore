@@ -17,3 +17,6 @@ test
 .DS_store
 
 qtest/
+_build/
+setup.data
+setup.log

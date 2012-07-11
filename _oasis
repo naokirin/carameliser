@@ -1,0 +1,31 @@
+OASISFormat:  0.3
+OCamlVersion: >= 3.12.1
+Name:         carameliser
+Version:      0.1
+Synopsis:     extended standard library
+Authors:      naokirin
+Copyrights:   (C) 2011-2012 naokirin
+License:      MIT
+LicenseFile:  LICENSE
+Plugins:      StdFiles (0.3), DevFiles (0.3), META (0.3)
+BuildTools:   ocamlbuild
+Description:  Extended Standard Library without additional installation
+
+
+Library caramel
+  Path:            lib
+  BuildTools:      ocamlbuild
+  FindlibName:     carameliser
+  BuildDepends:    num
+  Modules:         Caramel
+  InternalModules: Caramel_utils,
+                   Caramel_array,
+                   Caramel_list,
+                   Caramel_string,
+                   Caramel_option,
+                   Caramel_lazy,
+                   Caramel_monad,
+                   Caramel_either,
+                   Caramel_lazy_stream,
+                   Caramel_num,
+                   Caramel_parser

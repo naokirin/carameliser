@@ -1,0 +1,15 @@
+# OASIS_START
+# DO NOT EDIT (digest: 8427d6d0d1d3bbdf66d3452d3ab64768)
+Caramel
+Caramel_utils
+Caramel_array
+Caramel_list
+Caramel_string
+Caramel_option
+Caramel_lazy
+Caramel_monad
+Caramel_either
+Caramel_lazy_stream
+Caramel_num
+Caramel_parser
+# OASIS_STOP

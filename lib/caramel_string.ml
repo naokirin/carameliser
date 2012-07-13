@@ -36,3 +36,35 @@ let hd str = if is_empty str then raise (Failure "hd") else get str 0
 let tl str = if is_empty str then raise (Failure "tl") else sub ~pos:1 ~len:((length str) -1) str
 
 let string_of_char c = make 1 c
+
+module Optional = struct
+  module O = Caramel_option
+  let get str n = O.ret_option (get str) n
+  let create n = O.ret_option create n
+  let make n c = O.ret_option (make n) c
+  let sub str ~pos ~len = O.ret_option (sub ~pos:pos ~len:len) str
+  let index str c = O.ret_option (index str) c
+  let rindex str c = O.ret_option (rindex str) c
+  let index_from str n c = O.ret_option (index_from str n) c
+  let rindex_from str n c = O.ret_option (rindex_from str n) c
+  let contains_from str n c = O.ret_option (contains_from str n) c
+  let rcontains_from str n c = O.ret_option (rcontains_from str n) c
+  let hd str = O.ret_option hd str
+  let tl str = O.ret_option tl str
+end
+
+module Of_either = struct
+  module E = Caramel_either
+  let get str n = E.ret_either (get str) n
+  let create n = E.ret_either create n
+  let make n c = E.ret_either (make n) c
+  let sub str ~pos ~len = E.ret_either (sub ~pos:pos ~len:len) str
+  let index str c = E.ret_either (index str) c
+  let rindex str c = E.ret_either (rindex str) c
+  let index_from str n c = E.ret_either (index_from str n) c
+  let rindex_from str n c = E.ret_either (rindex_from str n) c
+  let contains_from str n c = E.ret_either (contains_from str n) c
+  let rcontains_from str n c = E.ret_either (rcontains_from str n) c
+  let hd str = E.ret_either hd str
+  let tl str = E.ret_either tl str
+end

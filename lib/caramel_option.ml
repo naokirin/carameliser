@@ -46,7 +46,7 @@ let ret_option ~f x =
 *)
 
 
-module MaybeMonad = Caramel_monad.Make(struct
+module Maybe_monad = Caramel_monad.Make(struct
   type 'a t = 'a option
 
   let bind x f = match x with

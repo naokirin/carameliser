@@ -1,6 +1,6 @@
 type 'a t = 'a lazy_t
 
-module LazyMonad : Caramel_monad.S with type 'a t := 'a t
+module Lazy_monad : Caramel_monad.S with type 'a t := 'a t
 
 exception Undefined
 val force : 'a t -> 'a

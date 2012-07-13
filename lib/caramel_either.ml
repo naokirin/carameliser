@@ -20,7 +20,7 @@ let ret_either ~f x =
 *)
 
 
-module EitherMonad = Caramel_monad.Make2(struct
+module Either_monad = Caramel_monad.Make2(struct
   type ('a, 'b) t = ('a, 'b) either
 
   let bind m f = match m with

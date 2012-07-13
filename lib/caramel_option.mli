@@ -12,4 +12,4 @@ val value: 'a t -> default:'a -> 'a
     Return None if raises Exception. *)
 val ret_option: f:('a -> 'b) -> 'a -> 'b t
 
-module MaybeMonad : Caramel_monad.S with type 'a t := 'a t
+module Maybe_monad : Caramel_monad.S with type 'a t := 'a t

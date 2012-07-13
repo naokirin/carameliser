@@ -1,6 +1,6 @@
 type 'a t = 'a lazy_t
 
-module LazyMonad = Caramel_monad.Make(struct
+module Lazy_monad = Caramel_monad.Make(struct
   type 'a t = 'a lazy_t
   let return x = lazy x
   let bind m f = f (Lazy.force m)

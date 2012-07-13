@@ -348,7 +348,7 @@ module Of_either = struct
   let slice l ~start ~stop = E.ret_either (slice ~start:start ~stop:stop) l
 end
 
-module ListMonad = struct
+module List_monad = struct
   include Caramel_monad.Make(struct
     type 'a t = 'a list
 

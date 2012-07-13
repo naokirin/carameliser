@@ -245,7 +245,7 @@ module Of_either : sig
   val slice: 'a t -> start:int -> stop:int -> (exn, 'a t) Caramel_either.either
 end
 
-module ListMonad : sig
+module List_monad : sig
   include Caramel_monad.S with type 'a t := 'a t
   val guard : bool -> unit list
 end

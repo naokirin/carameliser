@@ -17,25 +17,25 @@ let cons s lst =
 let test =
   "Caramel.Utils" >::: [
     "|>" >:: (fun () ->
-        assert_equal ~msg:"arg 1" (1 |> (fun i -> i)) 1;
-        assert_equal ~msg:"arg 2" (1 |> (fun i x -> i+x) 2) 3);
+      assert_equal ~msg:"arg 1" (1 |> (fun i -> i)) 1;
+      assert_equal ~msg:"arg 2" (1 |> (fun i x -> i+x) 2) 3);
 
     "<|" >:: (fun () ->
-        assert_equal ~msg:"arg 1" ((fun i -> i) <| 1) 1;
-        assert_equal ~msg:"arg 2" (((fun i x -> i+x) 2) <| 1) 3);
+      assert_equal ~msg:"arg 1" ((fun i -> i) <| 1) 1;
+      assert_equal ~msg:"arg 2" (((fun i x -> i+x) 2) <| 1) 3);
 
     ">>" >:: (fun () ->
-        assert_equal ~msg:"composition"
-          (((fun i -> i+1) >> (fun i -> i*2)) 2) 6);
+      assert_equal ~msg:"composition"
+        (((fun i -> i+1) >> (fun i -> i*2)) 2) 6);
 
     "<<" >:: (fun () ->
-        assert_equal ~msg:"rev comp"
-          (((fun i -> i+1) << (fun i -> i*2)) 2) 5);
+      assert_equal ~msg:"rev comp"
+        (((fun i -> i+1) << (fun i -> i*2)) 2) 5);
 
     "Caramel.Utils.State_monad" >::: [
       "increment with int" >:: (fun () ->
         assert_equal ~msg:"incremented 1 is 2"
-           (1, 2) (State_monad.(get >>= fun s -> increment >>> return s) 1);
+          (1, 2) (State_monad.(get >>= fun s -> increment >>> return s) 1);
         assert_equal ~msg:"increment at twice"
           (2, 4) (State_monad.(get >>= fun s -> increment >>> increment >>> return s) 2);
         assert_equal ~msg:"put and increment at once"

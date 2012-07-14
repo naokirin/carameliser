@@ -12,7 +12,7 @@ module State_monad = struct
   include Caramel_monad.Make2(struct
     type ('a, 'b) t = ('a, 'b) state
 
-    let bind u f = fun s -> let (a, s') = u s in let u' = f a in u' s'
+    let bind m f = fun s -> let a, s' = m s in f a s'
 
     let return x = fun s -> (x, s)
   end)

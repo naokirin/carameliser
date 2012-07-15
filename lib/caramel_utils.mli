@@ -13,14 +13,19 @@ val (<<): ('a -> 'b) -> ('d -> 'a) -> 'd -> 'b
 
 (** State monad *)
 module State_monad : sig
-  type ('a, 'b) state = 'a -> ('b * 'a)
+  type ('a, 'b) state
   include Caramel_monad.S2 with type ('a, 'b) t := ('a, 'b) state
 
   val ( =<< ) : ('a -> ('c, 'b) state) -> ('c, 'a) state -> ('c, 'b) state
   val ( >>> ) : ('c, 'a) state -> ('c, 'b) state -> ('c, 'b) state
   val get : ('a, 'a) state
   val put : 'a -> ('a, unit) state
+
+  val run : ('a, 'b) state -> 'a -> ('b * 'a)
 end
+
+
+
 
 
 

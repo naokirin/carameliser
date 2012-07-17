@@ -8,25 +8,21 @@ let (<<) f g x = f (g x)
 
 module State_monad = struct
 
-  type ('a, 'b) state = State of ('a -> ('b * 'a))
-
-  let value = function State x -> x
+  type ('a, 'b) state = 'a -> ('b * 'a)
 
   include Caramel_monad.Make2(struct
     type ('a, 'b) t = ('a, 'b) state
 
-    let bind m f = State (fun s -> let a, s' = (value m) s in ((value (f a)) s'))
+    let bind m f = fun s -> let a, s' = m s in f a s'
 
-    let return x = State (fun s -> (x, s))
+    let return x = fun s -> (x, s)
   end)
 
   let ( =<< ) f m = bind m f
-  let ( >>> ) m x = m >>= (fun _ -> x)
+  let ( >>> ) m x = m >>= fun _ -> x
 
-  let get = State (fun s -> (s, s))
-  let put s = State (fun _ -> ((), s))
-
-  let run m a = (value m) a
+  let get = fun s -> (s, s)
+  let put s = fun _ -> ((), s)
 end
 
 

@@ -43,6 +43,11 @@ val tl : t -> t
 (** [string_of_char] is char to string. *)
 val string_of_char : char -> t
 
+(** [explode] is string to char list *)
+val explode : t -> char list
+
+(** [collect] is char list to string *)
+val collect : char list -> t
 
 (** In Module Optional functions return value of option. *)
 module Optional : sig

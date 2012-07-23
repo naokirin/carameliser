@@ -37,6 +37,13 @@ let tl str = if is_empty str then raise (Failure "tl") else sub ~pos:1 ~len:((le
 
 let string_of_char c = make 1 c
 
+let explode str =
+  let result = ref [] in
+  iter (fun c -> result := c::!result) str; Caramel_list.rev !result
+
+let collect lst =
+  Caramel_list.fold_left ~f:(fun p n -> p ^ (string_of_char n)) ~init:"" lst
+
 module Optional = struct
   module O = Caramel_option
   let get str n = O.ret_option (get str) n

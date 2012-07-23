@@ -126,12 +126,6 @@ val of_array : 'a array -> 'a t
 (** [to_array] is the same as Array.of_list. *)
 val to_array : 'a t -> 'a array
 
-(** [of_char] transform to char list from string. *)
-val of_char : string -> char t
-
-(** [to_string] transform to string from char list. *)
-val to_string : char t -> string
-
 val (@): 'a t -> 'a t -> 'a t
 
 module Infix : sig

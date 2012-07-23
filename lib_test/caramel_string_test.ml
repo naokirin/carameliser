@@ -19,4 +19,12 @@ let test =
         "" (tl "a");
       assert_raises ~msg:"tl empty raises Failure"
         (Failure "tl") (fun () -> tl ""));
+
+    "explode" >:: (fun () ->
+      assert_equal ~msg:"abcde"
+        ['a'; 'b'; 'c'; 'd'; 'e'] (explode "abcde"));
+
+    "collect" >:: (fun () ->
+      assert_equal ~msg:"abcde"
+        "abcde" (collect ['a'; 'b'; 'c'; 'd'; 'e']));
   ]

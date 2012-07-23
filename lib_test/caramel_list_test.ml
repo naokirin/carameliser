@@ -175,13 +175,6 @@ let test =
       assert_equal ~msg:"[1; 2; 3]"
         [|1; 2; 3|] (to_array [1; 2; 3]));
 
-    "of_char" >:: (fun () ->
-      assert_equal ~msg:"abcde"
-        ['a'; 'b'; 'c'; 'd'; 'e'] (of_char "abcde"));
-
-    "to_string" >:: (fun () ->
-      assert_equal ~msg:"abcde"
-        "abcde" (to_string ['a'; 'b'; 'c'; 'd'; 'e']));
 
     "Optional" >::: [
       "find" >:: (fun () ->

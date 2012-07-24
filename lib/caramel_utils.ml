@@ -23,6 +23,7 @@ module State_monad = struct
 
   let get = fun s -> (s, s)
   let put s = fun _ -> ((), s)
+  let run m s = m s
 end
 
 

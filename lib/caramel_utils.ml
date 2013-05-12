@@ -27,20 +27,21 @@ module State_monad = struct
 end
 
 
+module Continuation_monad = struct
+  type ('a, 'b) cont = ('b -> 'a) -> 'a
 
+  include Caramel_monad.Make2(struct
+      type ('a, 'b) t = ('a, 'b) cont
 
+      let bind m f = fun k -> m (fun x -> f x k)
+      let return x = fun k -> k x
+  end)
 
+  let callcc f = fun k -> f (fun a -> fun _ -> k a) k
 
+  let id x = x
+  let run m = m id
 
-
-
-
-
-
-
-
-
-
-
-
-
+  let reset f = fun g -> g (f id)
+  let shift f = fun g -> (f (fun x -> (fun h -> h (g x)))) id
+end

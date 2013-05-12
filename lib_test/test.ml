@@ -10,13 +10,3 @@ let _ =
      Caramel_num_test.test;
      Caramel_parser_test.test;
      Caramel_string_test.test]
-
-
-
-
-
-
-
-
-
-

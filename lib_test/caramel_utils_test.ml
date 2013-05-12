@@ -46,5 +46,27 @@ let test =
           (Cons ("a", Nils), 1) (State_monad.(run ((fun s -> return s) =<< cons "a" Nils) 0));
         assert_equal ~msg:"counter 2"
           (Cons ("b", Cons ("a", Nils)), 2) (State_monad.(run ((fun s -> return s) =<< (cons "b" =<< cons "a" Nils)) 0)))
+    ];
+
+    "Caramel.Utils.Continuation_monad" >::: [
+      "add to 10" >:: (fun () ->
+        assert_equal ~msg:"only 5, not 100"
+          15 
+          Continuation_monad.(run (
+            let proc k = (k 10) >>= (fun v -> return (v+100)) in
+            reset ((callcc proc) >>= (fun v -> return (v + 5)))));
+
+        assert_equal ~msg:"5 and 100"
+          115
+          Continuation_monad.(run (
+            callcc (fun _ -> ((return 10) >>= (fun v -> return (v+100))) >>=  (fun v -> return (v + 5))))))
     ]
   ]
+
+
+
+
+
+
+
+

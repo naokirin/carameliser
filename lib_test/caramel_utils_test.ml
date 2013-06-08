@@ -49,17 +49,24 @@ let test =
     ];
 
     "Caramel.Utils.Continuation_monad" >::: [
-      "add to 10" >:: (fun () ->
+      "add to 10" >:: Continuation_monad.(fun () ->
         assert_equal ~msg:"only 5, not 100"
           15 
-          Continuation_monad.(run (
-            let proc k = (k 10) >>= (fun v -> return (v+100)) in
-            reset ((callcc proc) >>= (fun v -> return (v + 5)))));
+          (run (
+            let proc k = (k 10) >>| (fun v -> v+100) in
+            reset ((callcc proc) >>| (fun v -> v + 5))));
 
         assert_equal ~msg:"5 and 100"
           115
-          Continuation_monad.(run (
-            callcc (fun _ -> ((return 10) >>= (fun v -> return (v+100))) >>=  (fun v -> return (v + 5))))))
+          (run (
+            callcc (fun _ -> ((return 10) >>| (fun v -> v+100)) >>|  (fun v -> v + 5)))));
+
+      "(2+3)*(4+2)" >:: Continuation_monad.(fun () ->
+        assert_equal ~msg:""
+          30
+          (run (callcc (
+            fun f -> ((return 2) >>| (fun v -> v+3))
+              >>| (fun v -> v * (run (callcc (fun _ -> ((return 4) >>| (fun v -> v+2))))))))))
     ]
   ]
 

@@ -93,7 +93,7 @@ module String_parser = struct
 
   let parse_string s =
     let lst = Caramel_list.collect (Caramel_string.explode s) ~f:(fun c -> [is (Caramel_string.string_of_char c)]) in
-    Caramel_list.(fold_left (tl lst) ~f:(fun x y -> x &>> y) ~init:(hd lst))
+    Caramel_list.(fold_right (rev (tl (rev lst))) ~f:(fun x y -> x &>> y) ~init:(hd (rev lst)))
 
   let lower = one_of "abcdefghijklmnopqrstuvwxyz"
   let upper = one_of "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

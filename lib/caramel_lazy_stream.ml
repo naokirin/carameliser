@@ -32,8 +32,8 @@ let rec next strm =
     | Cons (h, _) -> Some h
 
 let is_empty : 'a stream -> bool = function
-  | Nils -> false
-  | _ -> true
+  | Nils -> true
+  | _ -> false
 
 let rec hd strm =
   match strm with

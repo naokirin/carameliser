@@ -38,7 +38,18 @@ let test =
       assert_equal ~msg:"parse with *>>"
         None (parse (letters *>> spaces >>* letters) (stream_of_string "abc   def"));
       assert_equal ~msg:"parse with +>>"
-        (Some "def") (parse (letters +>> spaces >>+ letters) (stream_of_string "abc   def")))
+        (Some "def") (parse (letters +>> spaces >>+ letters) (stream_of_string "abc   def")));
+
+    "parse with parse_string" >:: (fun () ->
+      assert_equal ~msg:"parse Hello World"
+        (Some "Hello World") (parse (parse_string "Hello World") (stream_of_string "Hello World"));
+
+      assert_equal ~msg:"fail to parse"
+        None (parse (parse_string "hello world") (stream_of_string "Hello World")));
+
+    "parse_any with parse_string" >:: (fun () ->
+      assert_equal ~msg:"parse Hello World"
+        (Some "Hello World") (parse_any (parse_string "Hello World") (stream_of_string "My Hello World!")))
   ]
 
 

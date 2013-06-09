@@ -7,6 +7,9 @@ include Caramel_monad.S2 with type ('a, 'b) t := ('a, 'b) parser
 (* Parse stream. *)
 val parse : ('a, 'b) parser -> 'a stream -> 'b option
 
+(* Parse stream with any position. *)
+val parse_any : ('a, 'b) parser -> 'a stream -> 'b option
+
 (* Make chosing parser. *)
 val choose : ('a, 'b) parser -> ('a, 'b) parser -> ('a, 'b) parser
 val ( <|> ) : ('a, 'b) parser -> ('a, 'b) parser -> ('a, 'b) parser

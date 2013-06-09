@@ -26,6 +26,15 @@ let rec parse p strm =
   | Match x -> Some x
   | Parse (p', s) -> parse p' s
 
+let rec parse_any p strm =
+  match parse p strm with
+  | None ->(
+      try
+        parse_any p (Caramel_lazy_stream.tl strm)
+      with
+        _ -> None)
+  | Some x -> Some x
+
 let choose p p' strm =
   match p strm with
   | Fail -> p' strm
@@ -89,7 +98,7 @@ module String_parser = struct
 
   let one_of s = something_of s is
   let none_of s = something_of s is_not
-  let many_of s = (fold1 ~f:(fun x y -> x^y) ~init:"" (one_of s))
+  let many_of s = foldstr1 (one_of s)
 
   let parse_string s =
     let lst = Caramel_list.collect (Caramel_string.explode s) ~f:(fun c -> [is (Caramel_string.string_of_char c)]) in
@@ -104,7 +113,7 @@ module String_parser = struct
   let newline = is "\n"
   let tab = is "\t"
 
-  let one_or_more p = fold1 ~f:(fun x y -> x^y) ~init:"" p
+  let one_or_more p = foldstr1 p
 
   let lowers = one_or_more lower
   let uppers = one_or_more upper

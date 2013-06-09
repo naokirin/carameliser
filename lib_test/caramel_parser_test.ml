@@ -49,7 +49,23 @@ let test =
 
     "parse_any with parse_string" >:: (fun () ->
       assert_equal ~msg:"parse Hello World"
-        (Some "Hello World") (parse_any (parse_string "Hello World") (stream_of_string "My Hello World!")))
+        (Some "Hello World") (parse_any (parse_string "Hello World") (stream_of_string "My Hello World!")));
+
+    "parse_exactly with parse_string" >:: (fun () ->
+      assert_equal ~msg:"parse Hello World"
+        (Some "Hello World") (parse_exactly (parse_string "Hello World") (stream_of_string "Hello World"));
+      assert_equal ~msg:"fail to parse"
+        None (parse_exactly (parse_string "Hello World") (stream_of_string "Hello World!")));   
+
+    "parse_tl with parse_string" >:: (fun () ->
+      assert_equal ~msg:"parse Hello World"
+        (Some "Hello World") (parse_any (parse_string "Hello World") (stream_of_string "My Hello World!")));
+
+    "parse_tl with parse_string" >:: (fun () ->
+      assert_equal ~msg:"parse Hello World"
+        (Some "Hello World") (parse_tl (parse_string "Hello World") (stream_of_string "My Hello World"));
+      assert_equal ~msg:"fail to parse"
+        None (parse_tl (parse_string "Hello World") (stream_of_string "Hello World!")))
   ]
 
 
@@ -62,11 +78,3 @@ let p = perform with module Caramel.Parser in
   Caramel.Parser.return (a^b) in
   parse p (stream_of_string "1 0")
 *)
-
-
-
-
-
-
-
-

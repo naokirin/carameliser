@@ -35,6 +35,21 @@ let rec parse_any p strm =
         _ -> None)
   | Some x -> Some x
 
+let rec parse_exactly p strm =
+  match p strm with
+  | Fail -> None
+  | Match x -> if Caramel_lazy_stream.is_empty strm then Some x else None
+  | Parse (p', s) -> parse_exactly p' s
+
+let rec parse_tl p strm =
+  match parse_exactly p strm with
+  | None ->(
+      try
+        parse_tl p (Caramel_lazy_stream.tl strm)
+      with
+        _ -> None)
+  | Some x -> Some x
+
 let choose p p' strm =
   match p strm with
   | Fail -> p' strm

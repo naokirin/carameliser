@@ -10,6 +10,12 @@ val parse : ('a, 'b) parser -> 'a stream -> 'b option
 (* Parse stream with any position. *)
 val parse_any : ('a, 'b) parser -> 'a stream -> 'b option
 
+(* Parse exactly stream. *)
+val parse_exactly : ('a, 'b) parser -> 'a stream -> 'b option
+
+(* Parse stream at the end. *)
+val parse_tl : ('a, 'b) parser -> 'a stream -> 'b option
+
 (* Make chosing parser. *)
 val choose : ('a, 'b) parser -> ('a, 'b) parser -> ('a, 'b) parser
 val ( <|> ) : ('a, 'b) parser -> ('a, 'b) parser -> ('a, 'b) parser

@@ -28,4 +28,5 @@ Library caramel
                    Caramel_either,
                    Caramel_lazy_stream,
                    Caramel_num,
-                   Caramel_parser
+                   Caramel_parser,
+                   Caramel_applicative

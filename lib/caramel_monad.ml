@@ -23,6 +23,8 @@ module type S = sig
   val join: 'a t t -> 'a t
   val ignore: 'a t -> unit t
   val sequence : 'a t list -> 'a list t
+
+  include Caramel_applicative.S with type 'a t := 'a t
 end
 
 module Make(M:T) : S with type 'a t := 'a M.t = struct
@@ -41,6 +43,19 @@ module Make(M:T) : S with type 'a t := 'a M.t = struct
           return (x::xs))))
   let (>>=) = bind
   let (>>|) x f = map ~f x
+
+
+  let lift1 f x     = x >>= fun x -> return (f x)
+  let lift2 f x y   = x >>= fun x -> lift1 (f x) y
+
+  module Ap = Caramel_applicative.Make(struct
+    type 'a t = 'a M.t
+
+    let pure = return
+    let (<*>) f x  = lift2 (fun f x -> f x) f x
+  end)
+
+  include Ap
 end
 
 (** 2 argument constructor *)
@@ -69,6 +84,8 @@ module type S2 = sig
   val join: ('a, ('a, 'b) t) t -> ('a, 'b) t
   val ignore: ('a, 'b) t -> ('a, unit) t
   val sequence : ('a, 'b) t list -> ('a, 'b list) t
+
+  include Caramel_applicative.S2 with type ('a, 'b) t := ('a, 'b) t
 end
 
 module Make2(M:T2) : S2 with type ('a, 'b) t := ('a, 'b) M.t = struct
@@ -87,4 +104,17 @@ module Make2(M:T2) : S2 with type ('a, 'b) t := ('a, 'b) M.t = struct
           return (x::xs))))
   let (>>=) = bind
   let (>>|) x f = map ~f x
+
+
+  let lift1 f x     = x >>= fun x -> return (f x)
+  let lift2 f x y   = x >>= fun x -> lift1 (f x) y
+
+  module Ap = Caramel_applicative.Make2(struct
+    type ('a, 'b) t = ('a, 'b) M.t
+
+    let pure = return
+    let (<*>) f x  = lift2 (fun f x -> f x) f x
+  end)
+
+  include Ap
 end

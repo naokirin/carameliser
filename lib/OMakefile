@@ -11,6 +11,7 @@ FILES[] =
   caramel_string
   caramel_lazy_stream
   caramel_parser
+  caramel_applicative
   caramel_num
   caramel
 

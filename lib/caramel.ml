@@ -8,4 +8,5 @@ module String = Caramel_string
 module Lazy = Caramel_lazy
 module Lazy_stream = Caramel_lazy_stream
 module Parser = Caramel_parser
+module Applicative = Caramel_applicative
 module Num = Caramel_num
